@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: StarterView.route,
       routes: {
-        StarterView.route: (context) => const StarterView(pairingCode: 'A6B4DE',),
+        StarterView.route: (context) => const StarterView(),
         HomeView.route: (context) => const HomeView(),
       },
     );
