@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:diginotescreen/core/providers/firebase_pairing_provider.dart';
 import 'package:diginotescreen/ui/widgets/header.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class StarterView extends StatelessWidget {
   const StarterView({Key? key}) : super(key: key);
@@ -76,6 +78,7 @@ class __PairingCodeState extends State<_PairingCode> {
   void generatePairingCode() {
     setState(() {
       pairingCode = _randomString(widget.pairingCodeLength);
+      Provider.of<FirebasePairingProvider>(context, listen: false).addPairingCode(pairingCode);
     });
   }
 
