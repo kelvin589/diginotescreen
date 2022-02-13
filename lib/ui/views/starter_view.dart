@@ -1,6 +1,6 @@
+import 'dart:async';
 import 'dart:math';
 
-import 'package:diginotescreen/ui/views/home_view.dart';
 import 'package:diginotescreen/ui/widgets/header.dart';
 import 'package:flutter/material.dart';
 
@@ -42,18 +42,41 @@ class _PairingCode extends StatefulWidget {
   const _PairingCode({Key? key}) : super(key: key);
 
   final int pairingCodeLength = 6;
+  final int refreshDuration = 60;
 
   @override
   __PairingCodeState createState() => __PairingCodeState();
 }
 
 class __PairingCodeState extends State<_PairingCode> {
+  Timer? timer;
+  String pairingCode = "";
+
+  @override
+  void initState() {
+    super.initState();
+    generatePairingCode();
+    timer = Timer.periodic(Duration(seconds: widget.refreshDuration), (timer) => generatePairingCode());
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    timer?.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Text(
-      _randomString(widget.pairingCodeLength),
+      pairingCode,
       style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
     );
+  }
+
+  void generatePairingCode() {
+    setState(() {
+      pairingCode = _randomString(widget.pairingCodeLength);
+    });
   }
 
   String _randomString(int length) {
