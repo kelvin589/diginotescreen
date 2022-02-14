@@ -28,6 +28,7 @@ class StarterView extends StatelessWidget {
 
         ScreenPairing? screenPairing = snapshot.data;
         if (screenPairing != null && screenPairing.paired) {
+          print('Returning home view');
           return const HomeView();
         } else {
           return const MainView();
@@ -72,7 +73,7 @@ class MainView extends StatelessWidget {
 class _PairingCode extends StatefulWidget {
   const _PairingCode({Key? key}) : super(key: key);
 
-  final int pairingCodeLength = 6;
+  final int pairingCodeLength = 1;
   final int refreshDuration = 60;
 
   @override
