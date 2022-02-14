@@ -25,7 +25,7 @@ class FirebasePairingRepository {
         .catchError((error) => print("Failed to add pairing code: $error"));
   }
 
-  Stream<DocumentSnapshot<ScreenPairing>> getStream() {
+  Stream<ScreenPairing?> getStream() {
     return FirebaseFirestore.instance
       .collection('pairingCodes')
       .withConverter<ScreenPairing>(
@@ -34,6 +34,7 @@ class FirebasePairingRepository {
         toFirestore: (screenPairing, _) => screenPairing.toJson(),
       )
       .doc(token)
-      .snapshots();
+      .snapshots()
+      .map((snapshot) => snapshot.data());
   }
 }

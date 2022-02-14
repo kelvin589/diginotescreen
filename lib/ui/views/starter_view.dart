@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diginotescreen/core/models/screen_pairing_model.dart';
 import 'package:diginotescreen/core/providers/firebase_pairing_provider.dart';
 import 'package:diginotescreen/ui/views/home_view.dart';
@@ -16,19 +15,19 @@ class StarterView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<DocumentSnapshot<ScreenPairing>>(
+    return StreamBuilder<ScreenPairing?>(
       stream: Provider.of<FirebasePairingProvider>(context, listen: false).getStream(),
       builder: (BuildContext context, snapshot) {
         if (snapshot.hasError) {
-          return const Text('Error');
+          return Text('Error ${(snapshot.error.toString())}');
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Text('Waiting');
         }
-        
-        ScreenPairing screenPairing = snapshot.data!.data() as ScreenPairing;
-        if (screenPairing.paired) {
+
+        ScreenPairing? screenPairing = snapshot.data;
+        if (screenPairing != null && screenPairing.paired) {
           return const HomeView();
         } else {
           return const MainView();
