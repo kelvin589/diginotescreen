@@ -73,7 +73,7 @@ class MainView extends StatelessWidget {
 class _PairingCode extends StatefulWidget {
   const _PairingCode({Key? key}) : super(key: key);
 
-  final int pairingCodeLength = 6;
+  final int pairingCodeLength = 1;
   final int refreshDuration = 60;
 
   @override
