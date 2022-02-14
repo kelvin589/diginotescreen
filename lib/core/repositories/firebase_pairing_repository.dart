@@ -20,7 +20,7 @@ class FirebasePairingRepository {
   Future<void> addPairingCode(String pairingCode) async {
     return _pairingCodes
         .doc(token)
-        .set(ScreenPairing(pairingCode: pairingCode, paired: false))
+        .set(ScreenPairing(pairingCode: pairingCode, paired: false), SetOptions(merge: true))
         .then((value) => print("Added pairing code"))
         .catchError((error) => print("Failed to add pairing code: $error"));
   }

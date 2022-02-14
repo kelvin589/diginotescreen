@@ -28,6 +28,7 @@ class StarterView extends StatelessWidget {
 
         ScreenPairing? screenPairing = snapshot.data;
         if (screenPairing != null && screenPairing.paired) {
+          print('Returning home view');
           return const HomeView();
         } else {
           return const MainView();
