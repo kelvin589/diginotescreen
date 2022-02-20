@@ -1,6 +1,8 @@
+import 'dart:ffi';
+
 import 'package:diginotescreen/core/models/messages_model.dart';
 import 'package:diginotescreen/core/providers/firebase_preview_provider.dart';
-import 'package:diginotescreen/ui/widgets/preview_list_item.dart';
+import 'package:diginotescreen/ui/widgets/preview_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,51 +18,38 @@ class PreviewView extends StatefulWidget {
 class _PreviewViewState extends State<PreviewView> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Messages'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              print(MediaQuery.of(context).size);
-              print(MediaQuery.of(context).devicePixelRatio);
-            },
-            icon: Icon(Icons.text_fields),
-          ),
-        ],
-      ),
-      body: StreamBuilder<Iterable<Message>>(
-        stream: Provider.of<FirebasePreviewProvider>(context, listen: false)
-            .getMessages(widget.screenToken),
-        builder: (BuildContext context, snapshot) {
-          if (snapshot.hasError) {
-            return Text('Error ${(snapshot.error.toString())}');
-          }
+    return SafeArea(
+      child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            print(MediaQuery.of(context).size);
+          },
+          child: const Icon(Icons.add),
+        ),
+        body: StreamBuilder<Iterable<Message>>(
+          stream: Provider.of<FirebasePreviewProvider>(context, listen: false)
+              .getMessages(widget.screenToken),
+          builder: (BuildContext context, snapshot) {
+            if (snapshot.hasError) {
+              return Text('Error ${(snapshot.error.toString())}');
+            }
 
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Text('Waiting');
-          }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Text('Waiting');
+            }
 
-          Iterable<Message>? screens = snapshot.data;
-          if (screens != null) {
-            List<Widget> items = <Widget>[];
-            items = _updateScreenItems(context, screens);
-            return ListView.builder(
-              padding: const EdgeInsets.only(top: 8),
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: <Widget>[
-                    items[index],
-                    const Divider(),
-                  ],
-                );
-              },
-            );
-          } else {
-            return const Text('Error occurred');
-          }
-        },
+            Iterable<Message>? screens = snapshot.data;
+            if (screens != null) {
+              List<Widget> items = <Widget>[];
+              items = _updateScreenItems(context, screens);
+              return Stack(
+                children: items,
+              );
+            } else {
+              return const Text('Error occurred');
+            }
+          },
+        ),
       ),
     );
   }
@@ -71,8 +60,7 @@ class _PreviewViewState extends State<PreviewView> {
 
     if (messages != null) {
       for (Message message in messages) {
-        messageItems.add(
-            PreviewListItem(header: message.header, message: message.message));
+        messageItems.add(PreviewItem(message: message));
       }
     }
 
