@@ -19,6 +19,15 @@ class _PreviewViewState extends State<PreviewView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Messages'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              print(MediaQuery.of(context).size);
+              print(MediaQuery.of(context).devicePixelRatio);
+            },
+            icon: Icon(Icons.text_fields),
+          ),
+        ],
       ),
       body: StreamBuilder<Iterable<Message>>(
         stream: Provider.of<FirebasePreviewProvider>(context, listen: false)

@@ -3,7 +3,9 @@ import 'dart:math';
 
 import 'package:diginotescreen/core/models/screen_pairing_model.dart';
 import 'package:diginotescreen/core/providers/firebase_pairing_provider.dart';
+import 'package:diginotescreen/ui/shared/device_info.dart';
 import 'package:diginotescreen/ui/views/preview_list_view.dart';
+import 'package:diginotescreen/ui/views/preview_view.dart';
 import 'package:diginotescreen/ui/widgets/header.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,11 +31,11 @@ class StarterView extends StatelessWidget {
 
         ScreenPairing? screenPairing = snapshot.data;
         if (screenPairing != null && screenPairing.paired) {
-          return PreviewListView(
+          return PreviewView(
             screenToken: screenPairing.screenToken,
           );
         } else {
-          return const MainView();
+          return MainView(mainContext: context,);
         }
       },
     );
@@ -41,7 +43,9 @@ class StarterView extends StatelessWidget {
 }
 
 class MainView extends StatelessWidget {
-  const MainView({Key? key}) : super(key: key);
+  const MainView({Key? key, required this.mainContext}) : super(key: key);
+
+  final BuildContext mainContext;
 
   @override
   Widget build(BuildContext context) {
@@ -55,13 +59,13 @@ class MainView extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: const <Widget>[
-                  Text(
+                children: <Widget>[
+                  const Text(
                     'Welcome, enter the following code to pair this screen:',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 22),
                   ),
-                  _PairingCode(),
+                  _PairingCode(mainContext: mainContext,),
                 ],
               ),
             ),
@@ -73,7 +77,9 @@ class MainView extends StatelessWidget {
 }
 
 class _PairingCode extends StatefulWidget {
-  const _PairingCode({Key? key}) : super(key: key);
+  const _PairingCode({Key? key, required this.mainContext}) : super(key: key);
+
+  final BuildContext mainContext;
 
   final int pairingCodeLength = 6;
   final int refreshDuration = 60;
@@ -112,7 +118,7 @@ class __PairingCodeState extends State<_PairingCode> {
     setState(() {
       pairingCode = _randomString(widget.pairingCodeLength);
       Provider.of<FirebasePairingProvider>(context, listen: false)
-          .addPairingCode(pairingCode);
+          .addPairingCode(pairingCode, DeviceInfo(context: widget.mainContext));
     });
   }
 
