@@ -13,8 +13,9 @@ class FirebasePairingRepository {
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
   String? token;
-  FirebasePairingRepository() {
-    firebaseMessaging.getToken().then((value) { token = value; });
+  Future<String?> init() async {
+    String? retrievedToken = await firebaseMessaging.getToken();
+    token = retrievedToken;
   }
 
   Future<void> addPairingCode(String pairingCode) async {
@@ -28,12 +29,12 @@ class FirebasePairingRepository {
   Stream<ScreenPairing?> getStream() {
     return FirebaseFirestore.instance
       .collection('pairingCodes')
+      .doc(token)
       .withConverter<ScreenPairing>(
         fromFirestore: (snapshot, _) =>
             ScreenPairing.fromJson(snapshot.data()!),
         toFirestore: (screenPairing, _) => screenPairing.toJson(),
       )
-      .doc(token)
       .snapshots()
       .map((snapshot) => snapshot.data());
   }

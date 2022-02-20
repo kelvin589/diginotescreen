@@ -11,6 +11,7 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   final FirebasePairingProvider pairingProvider = FirebasePairingProvider();
+  await pairingProvider.init();
 
   runApp(MultiProvider(
     providers: [

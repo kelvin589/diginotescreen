@@ -6,6 +6,10 @@ class FirebasePairingProvider extends ChangeNotifier {
   final FirebasePairingRepository _pairingRepository =
       FirebasePairingRepository();
 
+  Future<String?> init() async {
+    await _pairingRepository.init();
+  }
+
   Future<void> addPairingCode(String pairingCode) async {
     await _pairingRepository.addPairingCode(pairingCode);
   }
