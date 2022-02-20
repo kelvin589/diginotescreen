@@ -11,8 +11,8 @@ class ScreenPairing {
           userID: json['userID']! as String,
           lastUpdated: DateTime.parse((json['lastUpdated']! as Timestamp).toDate().toString()),
           screenToken: json['screenToken']! as String,
-          width: json['width']! as double,
-          height: json['height']! as double,
+          width: (json['width']! as num).toDouble(),
+          height: (json['height']! as num).toDouble(),
         );
 
   final String pairingCode;
