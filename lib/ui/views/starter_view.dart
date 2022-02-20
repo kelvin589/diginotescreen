@@ -3,20 +3,21 @@ import 'dart:math';
 
 import 'package:diginotescreen/core/models/screen_pairing_model.dart';
 import 'package:diginotescreen/core/providers/firebase_pairing_provider.dart';
-import 'package:diginotescreen/ui/views/home_view.dart';
+import 'package:diginotescreen/ui/views/preview_view.dart';
 import 'package:diginotescreen/ui/widgets/header.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class StarterView extends StatelessWidget {
-  const StarterView({ Key? key }) : super(key: key);
+  const StarterView({Key? key}) : super(key: key);
 
   static const String route = '/starter';
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<ScreenPairing?>(
-      stream: Provider.of<FirebasePairingProvider>(context, listen: false).getStream(),
+      stream: Provider.of<FirebasePairingProvider>(context, listen: false)
+          .getStream(),
       builder: (BuildContext context, snapshot) {
         if (snapshot.hasError) {
           return Text('Error ${(snapshot.error.toString())}');
@@ -28,8 +29,9 @@ class StarterView extends StatelessWidget {
 
         ScreenPairing? screenPairing = snapshot.data;
         if (screenPairing != null && screenPairing.paired) {
-          print('Returning home view');
-          return const HomeView();
+          return PreviewView(
+            screenToken: screenPairing.screenToken,
+          );
         } else {
           return const MainView();
         }
@@ -88,7 +90,8 @@ class __PairingCodeState extends State<_PairingCode> {
   void initState() {
     super.initState();
     generatePairingCode();
-    timer = Timer.periodic(Duration(seconds: widget.refreshDuration), (timer) => generatePairingCode());
+    timer = Timer.periodic(Duration(seconds: widget.refreshDuration),
+        (timer) => generatePairingCode());
   }
 
   @override
@@ -108,7 +111,8 @@ class __PairingCodeState extends State<_PairingCode> {
   void generatePairingCode() {
     setState(() {
       pairingCode = _randomString(widget.pairingCodeLength);
-      Provider.of<FirebasePairingProvider>(context, listen: false).addPairingCode(pairingCode);
+      Provider.of<FirebasePairingProvider>(context, listen: false)
+          .addPairingCode(pairingCode);
     });
   }
 

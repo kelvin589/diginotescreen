@@ -21,21 +21,30 @@ class FirebasePairingRepository {
   Future<void> addPairingCode(String pairingCode) async {
     return _pairingCodes
         .doc(token)
-        .set(ScreenPairing(pairingCode: pairingCode, paired: false), SetOptions(merge: true))
+        .set(
+            ScreenPairing(
+              pairingCode: pairingCode,
+              paired: false,
+              lastUpdated: DateTime.now(),
+              name: '',
+              screenToken: '',
+              userID: '',
+            ),
+            SetOptions(merge: true))
         .then((value) => print("Added pairing code"))
         .catchError((error) => print("Failed to add pairing code: $error"));
   }
 
   Stream<ScreenPairing?> getStream() {
     return FirebaseFirestore.instance
-      .collection('pairingCodes')
-      .doc(token)
-      .withConverter<ScreenPairing>(
-        fromFirestore: (snapshot, _) =>
-            ScreenPairing.fromJson(snapshot.data()!),
-        toFirestore: (screenPairing, _) => screenPairing.toJson(),
-      )
-      .snapshots()
-      .map((snapshot) => snapshot.data());
+        .collection('pairingCodes')
+        .doc(token)
+        .withConverter<ScreenPairing>(
+          fromFirestore: (snapshot, _) =>
+              ScreenPairing.fromJson(snapshot.data()!),
+          toFirestore: (screenPairing, _) => screenPairing.toJson(),
+        )
+        .snapshots()
+        .map((snapshot) => snapshot.data());
   }
 }
