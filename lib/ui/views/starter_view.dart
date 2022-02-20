@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:diginotescreen/core/models/screen_pairing_model.dart';
 import 'package:diginotescreen/core/providers/firebase_pairing_provider.dart';
-import 'package:diginotescreen/ui/views/preview_view.dart';
+import 'package:diginotescreen/ui/views/preview_list_view.dart';
 import 'package:diginotescreen/ui/widgets/header.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +29,7 @@ class StarterView extends StatelessWidget {
 
         ScreenPairing? screenPairing = snapshot.data;
         if (screenPairing != null && screenPairing.paired) {
-          return PreviewView(
+          return PreviewListView(
             screenToken: screenPairing.screenToken,
           );
         } else {
