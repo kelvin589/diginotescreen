@@ -1,4 +1,5 @@
 import 'package:diginotescreen/core/providers/firebase_pairing_provider.dart';
+import 'package:diginotescreen/core/providers/firebase_preview_provider.dart';
 import 'package:diginotescreen/firebase_options.dart';
 import 'package:diginotescreen/ui/views/home_view.dart';
 import 'package:diginotescreen/ui/views/starter_view.dart';
@@ -11,11 +12,14 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   final FirebasePairingProvider pairingProvider = FirebasePairingProvider();
+  final FirebasePreviewProvider previewProvider = FirebasePreviewProvider();
+
   await pairingProvider.init();
 
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => pairingProvider),
+      ChangeNotifierProvider(create: (context) => previewProvider),
     ],
     child: const MyApp(),
   ));
