@@ -19,12 +19,6 @@ class _PreviewViewState extends State<PreviewView> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            print(MediaQuery.of(context).size);
-          },
-          child: const Icon(Icons.add),
-        ),
         body: StreamBuilder<Iterable<Message>>(
           stream: Provider.of<FirebasePreviewProvider>(context, listen: false)
               .getMessages(widget.screenToken),

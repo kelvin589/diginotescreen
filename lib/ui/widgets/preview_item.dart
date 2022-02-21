@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:diginotescreen/core/models/messages_model.dart';
 import 'package:flutter/material.dart';
 
@@ -28,6 +29,12 @@ class MessageItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      constraints: const BoxConstraints(
+        minHeight: 100,
+        minWidth: 100,
+        maxHeight: 100,
+        maxWidth: 100,
+      ),
       decoration: const BoxDecoration(
         color: Colors.red,
       ),
@@ -42,7 +49,14 @@ class MessageItem extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 16.0),
                   )
                 : Container(),
-            Flexible(child: Text(message.message)),
+            Expanded(
+              child: Center(
+                child: AutoSizeText(
+                  message.message,
+                  minFontSize: 3,
+                ),
+              ),
+            ),
           ],
         ),
       ),

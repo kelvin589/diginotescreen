@@ -39,6 +39,7 @@ dependencies:
   cloud_firestore: ^3.1.8
   provider: ^6.0.2
   firebase_messaging: ^11.2.6
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:
