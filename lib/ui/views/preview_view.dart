@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:diginotescreen/core/models/messages_model.dart';
 import 'package:diginotescreen/core/providers/firebase_preview_provider.dart';

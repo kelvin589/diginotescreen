@@ -13,11 +13,36 @@ class PreviewItem extends StatelessWidget {
       top: message.y,
       child: Container(
         color: Colors.red,
+        child: MessageItem(message: message),
+      ),
+    );
+  }
+}
+
+class MessageItem extends StatelessWidget {
+  const MessageItem({Key? key, required this.message})
+      : super(key: key);
+
+  final Message message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.red,
+      ),
+      padding: const EdgeInsets.all(8.0),
+      child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(message.header),
-            Text(message.message),
+            message.header != ""
+                ? Padding(
+                    child: Text(message.header),
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                  )
+                : Container(),
+            Flexible(child: Text(message.message)),
           ],
         ),
       ),
