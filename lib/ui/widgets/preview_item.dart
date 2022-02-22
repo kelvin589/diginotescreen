@@ -1,5 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:diginotescreen/core/models/messages_model.dart';
+import 'package:diginotescreen/core/providers/firebase_pairing_provider.dart';
+import 'package:diginotescreen/core/providers/firebase_preview_provider.dart';
 import 'package:diginotescreen/ui/shared/timer_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -62,39 +64,45 @@ class MessageItem extends StatelessWidget {
           ),
         ),
         _RemainingTimePanel(
-            from: message.from, to: message.to, scheduled: message.scheduled),
+          message: message,
+        ),
       ],
     );
   }
 }
 
 class _RemainingTimePanel extends StatelessWidget {
-  const _RemainingTimePanel(
-      {Key? key, required this.from, required this.to, required this.scheduled})
+  const _RemainingTimePanel({Key? key, required this.message})
       : super(key: key);
 
-  final DateTime from;
-  final DateTime to;
-  final bool scheduled;
+  final Message message;
 
   @override
   Widget build(BuildContext context) {
     return Consumer<TimerProvider>(
       builder: (context, value, child) {
-        return Text(_scheduleText());
+        return Text(_scheduleText(context));
       },
     );
   }
 
-  String _scheduleText() {
-    Duration difference = to.difference(DateTime.now());
+  String _scheduleText(BuildContext context) {
+    Duration difference = message.to.difference(DateTime.now());
     // If message is scheduled and to is not in the past, show the remaining time
-    if (scheduled && !difference.isNegative) {
+    if (message.scheduled && !difference.isNegative) {
       return _printDuration(difference);
-    } else {
-      // no schedule or schedule passed
+    } else if (message.scheduled && difference.isNegative) {
+      // schedule but schedule passed
+      String? screenToken =
+          Provider.of<FirebasePairingProvider>(context, listen: false)
+              .getToken();
+      if (screenToken != null) {
+        Provider.of<FirebasePreviewProvider>(context, listen: false)
+            .deleteMessage(screenToken, message.id);
+      }
       return "";
     }
+    return "";
   }
 
   // Code taken from here to represent duration as hours:minutes:seconds

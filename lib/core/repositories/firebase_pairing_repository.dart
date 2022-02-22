@@ -19,6 +19,8 @@ class FirebasePairingRepository {
     token = retrievedToken;
   }
 
+  String? getToken() => token;
+
   Future<void> addPairingCode(String pairingCode, DeviceInfo deviceInfo) async {
     return _pairingCodes
         .doc(token)

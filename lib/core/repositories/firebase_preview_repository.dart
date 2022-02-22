@@ -18,4 +18,16 @@ class FirebasePreviewRepository {
         .snapshots()
         .map((snapshot) => snapshot.docs.map((e) => e.data()));
   }
+
+  void deleteMessage(String screenToken, String messageID) {
+    FirebaseFirestore.instance
+        .collection('messages')
+        .doc(screenToken)
+        .collection('message')
+        .doc(messageID)
+        .delete()
+        .then((value) => print("Deleted message"))
+        .onError(
+            (error, stackTrace) => print("unable to delete message: $error"));
+  }
 }

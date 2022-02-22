@@ -8,4 +8,8 @@ class FirebasePreviewProvider extends ChangeNotifier {
   Stream<Iterable<Message>> getMessages(String screenToken) {
     return _previewRepository.getMessages(screenToken);
   }
+
+  void deleteMessage(String screenToken, String messageID) {
+    _previewRepository.deleteMessage(screenToken, messageID);
+  }
 }
