@@ -92,7 +92,8 @@ class _RemainingTimePanel extends StatelessWidget {
     if (scheduled && !difference.isNegative) {
       return _printDuration(difference);
     } else {
-      return "No Schedule";
+      // no schedule or schedule passed
+      return "";
     }
   }
 
