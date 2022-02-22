@@ -4,27 +4,24 @@ import 'package:flutter/material.dart';
 
 class TimerProvider extends ChangeNotifier {
   TimerProvider({required this.duration}) {
-    timer = Timer.periodic(duration, (timer) { 
-      print("test");
-      notifyListeners();
-    });
+    timer = Timer.periodic(duration, onTimerCallback);
   }
 
-  final Duration duration;
+  Duration duration;
   Timer? timer;
 
-  void startTimer() {
-    print("test");
+  void stopTimer() {
+    timer?.cancel();
   }
 
-  void stopTimer() {
-    print("STOP");  
-    timer?.cancel();
+  void onTimerCallback(Timer timer) {
+    if (timer.isActive) {
+      notifyListeners();
+    }
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     stopTimer();
   }

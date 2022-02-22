@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:diginotescreen/core/models/messages_model.dart';
+import 'package:diginotescreen/ui/shared/timer_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PreviewItem extends StatelessWidget {
   const PreviewItem({Key? key, required this.message}) : super(key: key);
@@ -74,7 +76,11 @@ class _RemainingTimePanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(_scheduleText());
+    return Consumer<TimerProvider>(
+      builder: (context, value, child) {
+        return Text(_scheduleText());
+      },
+    );
   }
 
   String _scheduleText() {

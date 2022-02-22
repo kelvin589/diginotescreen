@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:diginotescreen/core/models/screen_pairing_model.dart';
 import 'package:diginotescreen/core/providers/firebase_pairing_provider.dart';
 import 'package:diginotescreen/ui/shared/device_info.dart';
+import 'package:diginotescreen/ui/shared/timer_provider.dart';
 import 'package:diginotescreen/ui/views/preview_list_view.dart';
 import 'package:diginotescreen/ui/views/preview_view.dart';
 import 'package:diginotescreen/ui/widgets/header.dart';
@@ -31,8 +32,11 @@ class StarterView extends StatelessWidget {
 
         ScreenPairing? screenPairing = snapshot.data;
         if (screenPairing != null && screenPairing.paired) {
-          return PreviewView(
-            screenToken: screenPairing.screenToken,
+          return ChangeNotifierProvider(
+            create: (context) => TimerProvider(duration: const Duration(seconds: 1)),
+            child: PreviewView(
+              screenToken: screenPairing.screenToken,
+            ),
           );
         } else {
           return MainView(mainContext: context,);
