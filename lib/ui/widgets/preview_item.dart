@@ -12,54 +12,86 @@ class PreviewItem extends StatelessWidget {
     return Positioned(
       left: message.x,
       top: message.y,
-      child: Container(
-        color: Colors.red,
-        child: MessageItem(message: message),
-      ),
+      child: MessageItem(message: message),
     );
   }
 }
 
 class MessageItem extends StatelessWidget {
-  const MessageItem({Key? key, required this.message})
-      : super(key: key);
+  const MessageItem({Key? key, required this.message}) : super(key: key);
 
   final Message message;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints(
-        minHeight: 100,
-        minWidth: 100,
-        maxHeight: 100,
-        maxWidth: 100,
-      ),
-      decoration: const BoxDecoration(
-        color: Colors.red,
-      ),
-      padding: const EdgeInsets.all(8.0),
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            message.header != ""
-                ? Padding(
-                    child: Text(message.header),
-                    padding: const EdgeInsets.only(bottom: 16.0),
-                  )
-                : Container(),
-            Expanded(
-              child: Center(
-                child: AutoSizeText(
-                  message.message,
-                  minFontSize: 3,
+    return Column(
+      children: [
+        Container(
+          constraints: const BoxConstraints(
+            minHeight: 100,
+            minWidth: 100,
+            maxHeight: 100,
+            maxWidth: 100,
+          ),
+          decoration: const BoxDecoration(
+            color: Colors.red,
+          ),
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                message.header != ""
+                    ? Padding(
+                        child: Text(message.header),
+                        padding: const EdgeInsets.only(bottom: 16.0),
+                      )
+                    : Container(),
+                Expanded(
+                  child: Center(
+                    child: AutoSizeText(
+                      message.message,
+                      minFontSize: 3,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
+        _RemainingTimePanel(from: message.from, to: message.to),
+      ],
     );
+  }
+}
+
+class _RemainingTimePanel extends StatelessWidget {
+  const _RemainingTimePanel({Key? key, required this.from, required this.to})
+      : super(key: key);
+
+  final DateTime from;
+  final DateTime to;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(_scheduleText());
+  }
+
+  String _scheduleText() {
+    Duration difference = to.difference(DateTime.now());
+    if (difference.isNegative) {
+      return "No Schedule";
+    } else {
+      return _printDuration(difference);
+    }
+  }
+
+  // Code taken from here to represent duration as hours:minutes:seconds
+  //https://stackoverflow.com/questions/54775097/formatting-a-duration-like-hhmmss
+  String _printDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
   }
 }

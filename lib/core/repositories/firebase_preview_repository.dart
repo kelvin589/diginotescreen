@@ -8,7 +8,11 @@ class FirebasePreviewRepository {
         .doc(screenToken)
         .collection('message')
         .withConverter<Message>(
-          fromFirestore: (snapshot, _) => Message.fromJson(snapshot.data()!),
+          fromFirestore: (snapshot, _) {
+            Map<String, dynamic> map = snapshot.data()!;
+            map['id'] = snapshot.id;
+            return Message.fromJson(map);
+          },
           toFirestore: (message, _) => message.toJson(),
         )
         .snapshots()
