@@ -1,4 +1,3 @@
-
 import 'package:diginotescreen/core/models/messages_model.dart';
 import 'package:diginotescreen/core/providers/firebase_preview_provider.dart';
 import 'package:diginotescreen/ui/widgets/preview_item.dart';
@@ -53,7 +52,9 @@ class _PreviewViewState extends State<PreviewView> {
 
     if (messages != null) {
       for (Message message in messages) {
-        messageItems.add(PreviewItem(message: message));
+        if (message.from.isBefore(DateTime.now())) {
+          messageItems.add(PreviewItem(message: message));
+        }
       }
     }
 

@@ -18,4 +18,6 @@ class FirebasePairingProvider extends ChangeNotifier {
   Stream<ScreenPairing?> getStream() {
     return _pairingRepository.getStream();
   }
+
+  String? getToken() => _pairingRepository.getToken();
 }
