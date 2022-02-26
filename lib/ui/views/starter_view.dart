@@ -86,7 +86,7 @@ class _PairingCode extends StatefulWidget {
   final BuildContext mainContext;
 
   final int pairingCodeLength = 6;
-  final int refreshDuration = 60;
+  final int refreshDuration = 600;
 
   @override
   __PairingCodeState createState() => __PairingCodeState();
