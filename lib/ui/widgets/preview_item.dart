@@ -81,7 +81,7 @@ class _RemainingTimePanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<TimerProvider>(
       builder: (context, value, child) {
-        return Text(_scheduleText(context));
+        return Text(_scheduleText(context), style: const TextStyle(color: Colors.transparent));
       },
     );
   }
