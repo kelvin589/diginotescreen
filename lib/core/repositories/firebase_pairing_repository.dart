@@ -4,25 +4,31 @@ import 'package:diginotescreen/ui/shared/device_info.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 class FirebasePairingRepository {
-  final CollectionReference _pairingCodes = FirebaseFirestore.instance
-      .collection('pairingCodes')
-      .withConverter<ScreenPairing>(
-        fromFirestore: (snapshot, _) =>
-            ScreenPairing.fromJson(snapshot.data()!),
-        toFirestore: (screenPairing, _) => screenPairing.toJson(),
-      );
-  final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+  FirebasePairingRepository({required this.firestoreInstance, this.token});
+
+  final FirebaseFirestore firestoreInstance;
+  late FirebaseMessaging firebaseMessaging;
 
   String? token;
+  // No mock for FCM. Instead, allow token to be passed in.
   Future<String?> init() async {
-    String? retrievedToken = await firebaseMessaging.getToken();
-    token = retrievedToken;
+    if (token == null) {
+      firebaseMessaging = FirebaseMessaging.instance;
+      String? retrievedToken = await firebaseMessaging.getToken();
+      token = retrievedToken;
+    }
   }
 
   String? getToken() => token;
 
   Future<void> addPairingCode(String pairingCode, DeviceInfo deviceInfo) async {
-    return _pairingCodes
+    return firestoreInstance
+        .collection('pairingCodes')
+        .withConverter<ScreenPairing>(
+          fromFirestore: (snapshot, _) =>
+              ScreenPairing.fromJson(snapshot.data()!),
+          toFirestore: (screenPairing, _) => screenPairing.toJson(),
+        )
         .doc(token)
         .set(
             ScreenPairing(
@@ -41,7 +47,7 @@ class FirebasePairingRepository {
   }
 
   Stream<ScreenPairing?> getStream() {
-    return FirebaseFirestore.instance
+    return firestoreInstance
         .collection('pairingCodes')
         .doc(token)
         .withConverter<ScreenPairing>(
