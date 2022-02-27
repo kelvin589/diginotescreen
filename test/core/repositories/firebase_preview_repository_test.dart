@@ -11,20 +11,22 @@ import 'package:provider/provider.dart';
 
 void main() async {
   group('Message Display', () {
-    FakeFirebaseFirestore firestoreInstance = FakeFirebaseFirestore();
     const String token = "token";
+    FakeFirebaseFirestore firestoreInstance = FakeFirebaseFirestore();
+    FirebasePairingProvider pairingProvider;
+    late FirebasePreviewProvider previewProvider;
 
     Future<void> loadApp(WidgetTester tester) async {
+      pairingProvider = FirebasePairingProvider(
+          firestoreInstance: firestoreInstance, token: token);
+      previewProvider =
+          FirebasePreviewProvider(firestoreInstance: firestoreInstance);
       // Load app
       await tester.pumpWidget(
         MultiProvider(
           providers: [
-            ChangeNotifierProvider(
-                create: (context) => FirebasePairingProvider(
-                    firestoreInstance: firestoreInstance, token: token)),
-            ChangeNotifierProvider(
-                create: (context) => FirebasePreviewProvider(
-                    firestoreInstance: firestoreInstance)),
+            ChangeNotifierProvider(create: (context) => pairingProvider),
+            ChangeNotifierProvider(create: (context) => previewProvider),
           ],
           child: const MyApp(),
         ),
@@ -53,7 +55,10 @@ void main() async {
           );
     }
 
-    Future<void> addMessage({required String messageID, required String header, required String message}) async {
+    Future<void> addMessage(
+        {required String messageID,
+        required String header,
+        required String message}) async {
       await firestoreInstance
           .collection('messages')
           .doc(token)
@@ -78,10 +83,15 @@ void main() async {
               scheduled: false));
     }
 
+    void deleteMessage(String messageID) {
+      previewProvider.deleteMessage(token, messageID);
+    }
+
     testWidgets('Display new message', (WidgetTester tester) async {
       await loadApp(tester);
 
-      await addMessage(messageID: 'messageID', header: 'Header', message: 'Message');
+      await addMessage(
+          messageID: 'messageID', header: 'Header', message: 'Message');
 
       await tester.idle();
       await tester.pump(Duration.zero);
@@ -89,6 +99,28 @@ void main() async {
 
       expect(find.text("Header"), findsOneWidget);
       expect(find.text("Message"), findsOneWidget);
+    });
+
+    testWidgets('Update display after deleting a message',
+        (WidgetTester tester) async {
+      await loadApp(tester);
+
+      await addMessage(
+          messageID: 'messageID', header: 'Header', message: 'Message');
+
+      await tester.idle();
+      await tester.pump(Duration.zero);
+      await tester.pump(Duration.zero);
+
+      expect(find.text("Header"), findsOneWidget);
+      expect(find.text("Message"), findsOneWidget);
+
+      deleteMessage('messageID');
+      await tester.idle();
+      await tester.pump(Duration.zero);
+
+      expect(find.text("Header"), findsNothing);
+      expect(find.text("Message"), findsNothing);
     });
   });
 
