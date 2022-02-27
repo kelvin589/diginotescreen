@@ -2,8 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diginotescreen/core/models/messages_model.dart';
 
 class FirebasePreviewRepository {
+  FirebasePreviewRepository({required this.firestoreInstance});
+
+  final FirebaseFirestore firestoreInstance;
+
   Stream<Iterable<Message>> getMessages(String screenToken) {
-    return FirebaseFirestore.instance
+    return firestoreInstance
         .collection('messages')
         .doc(screenToken)
         .collection('message')
@@ -20,7 +24,7 @@ class FirebasePreviewRepository {
   }
 
   void deleteMessage(String screenToken, String messageID) {
-    FirebaseFirestore.instance
+    firestoreInstance
         .collection('messages')
         .doc(screenToken)
         .collection('message')

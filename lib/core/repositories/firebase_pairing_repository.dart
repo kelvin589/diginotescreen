@@ -36,7 +36,7 @@ class FirebasePairingRepository {
               paired: false,
               lastUpdated: DateTime.now(),
               name: '',
-              screenToken: '',
+              screenToken: token!,
               userID: '',
               width: deviceInfo.width,
               height: deviceInfo.safeHeight,

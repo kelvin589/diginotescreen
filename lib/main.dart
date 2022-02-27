@@ -15,7 +15,7 @@ void main() async {
   FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
 
   final FirebasePairingProvider pairingProvider = FirebasePairingProvider(firestoreInstance: firestoreInstance);
-  final FirebasePreviewProvider previewProvider = FirebasePreviewProvider();
+  final FirebasePreviewProvider previewProvider = FirebasePreviewProvider(firestoreInstance: firestoreInstance);
 
   await pairingProvider.init();
 
