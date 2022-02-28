@@ -87,9 +87,9 @@ void main() async {
             x: 0,
             y: 0,
             id: message.id,
-            from: DateTime.now(),
-            to: DateTime.now(),
-            scheduled: false));
+            from: message.from,
+            to: message.to,
+            scheduled: message.scheduled));
   }
 
   void deleteMessage(String messageID) {
