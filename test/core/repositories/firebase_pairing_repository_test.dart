@@ -6,14 +6,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
-  testWidgets('Update pairing code, for an unpaired screen, every 10 minutes',
-      (WidgetTester tester) async {
-    FakeFirebaseFirestore firestoreInstance = FakeFirebaseFirestore();
-    // The device token
-    const String token = "";
-    // 10 minute duration
-    const codeRefreshRate = Duration(seconds: 600);
+  late FakeFirebaseFirestore firestoreInstance;
+  // The device token
+  const String token = "token";
 
+  setUp(() {
+    firestoreInstance = FakeFirebaseFirestore();
+  });
+
+  Future<void> loadApp(WidgetTester tester, String token) async {
     await tester.pumpWidget(
       ChangeNotifierProvider<FirebasePairingProvider>(
         child: const MyApp(),
@@ -21,29 +22,38 @@ void main() async {
             firestoreInstance: firestoreInstance, token: token),
       ),
     );
+  }
 
-    await tester.pump(const Duration(seconds: 1));
+  group('Pairing', () {
+    testWidgets('Update pairing code, for an unpaired screen, every 10 minutes',
+        (WidgetTester tester) async {
+      // 10 minute duration
+      const codeRefreshRate = Duration(seconds: 600);
 
-    // Find text matching regex expected of the format of pairing code
-    final pairingCodeFinder = find.textContaining(RegExp(r'^[A-Z0-9]{6}$'));
+      await loadApp(tester, token);
+      await tester.pump(const Duration(seconds: 1));
 
-    // ----Test the pairing code before---- //
-    expect(pairingCodeFinder, findsOneWidget);
-    String? codeBefore = (tester.firstWidget(pairingCodeFinder) as Text).data;
+      // Find text matching regex expected of the format of pairing code
+      final pairingCodeFinder = find.textContaining(RegExp(r'^[A-Z0-9]{6}$'));
 
-    final snapshotBefore =
-        await firestoreInstance.collection("pairingCodes").doc(token).get();
-    expect(snapshotBefore.get("pairingCode"), codeBefore);
+      // ----Test the pairing code before---- //
+      expect(pairingCodeFinder, findsOneWidget);
+      String? codeBefore = (tester.firstWidget(pairingCodeFinder) as Text).data;
 
-    // ----Test the pairing code after 10 minutes---- //
-    await tester.pump(codeRefreshRate);
+      final snapshotBefore =
+          await firestoreInstance.collection("pairingCodes").doc(token).get();
+      expect(snapshotBefore.get("pairingCode"), codeBefore);
 
-    expect(pairingCodeFinder, findsOneWidget);
-    String? codeAfter = (tester.firstWidget(pairingCodeFinder) as Text).data;
+      // ----Test the pairing code after 10 minutes---- //
+      await tester.pump(codeRefreshRate);
 
-    final snapshotAfter =
-        await firestoreInstance.collection("pairingCodes").doc(token).get();
-    expect(snapshotAfter.get("pairingCode"), codeAfter);
-    expect(snapshotAfter.get("pairingCode") != codeBefore, true);
+      expect(pairingCodeFinder, findsOneWidget);
+      String? codeAfter = (tester.firstWidget(pairingCodeFinder) as Text).data;
+
+      final snapshotAfter =
+          await firestoreInstance.collection("pairingCodes").doc(token).get();
+      expect(snapshotAfter.get("pairingCode"), codeAfter);
+      expect(snapshotAfter.get("pairingCode") != codeBefore, true);
+    });
   });
 }
