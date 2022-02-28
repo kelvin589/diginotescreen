@@ -4,6 +4,7 @@ import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../document_snapshot_matcher.dart';
+import '../../message_matcher.dart';
 import '../../query_snapshot_matcher.dart';
 
 void main() {
@@ -65,19 +66,14 @@ void main() {
 
   test('Get a stream of message snapshots', () async {
     expect(
-      firestoreInstance
-          .collection('messages')
-          .doc(token)
-          .collection('message')
-          .snapshots(),
+      previewRepository.getMessages(token),
       emitsInOrder([
-        QuerySnapshotMatcher([]),
-        QuerySnapshotMatcher([
-          DocumentSnapshotMatcher.onData(message.toJson()),
-        ]),
+        [],
+        [MessageMatcher(message.toJson())],
       ]),
     );
 
+    await Future.delayed(Duration.zero);
     await addMessage(message);
   });
 }
