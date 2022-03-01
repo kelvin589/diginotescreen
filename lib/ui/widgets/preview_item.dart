@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:clock/clock.dart';
 import 'package:diginotescreen/core/models/messages_model.dart';
 import 'package:diginotescreen/core/providers/firebase_pairing_provider.dart';
 import 'package:diginotescreen/core/providers/firebase_preview_provider.dart';
@@ -87,7 +88,7 @@ class _RemainingTimePanel extends StatelessWidget {
   }
 
   String _scheduleText(BuildContext context) {
-    Duration difference = message.to.difference(DateTime.now());
+    Duration difference = message.to.difference(clock.now());
     // If message is scheduled and to is not in the past, show the remaining time
     if (message.scheduled && !difference.isNegative) {
       return _printDuration(difference);
