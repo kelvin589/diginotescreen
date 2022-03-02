@@ -3,7 +3,6 @@ import 'package:clock/clock.dart';
 import 'package:diginotescreen/core/models/messages_model.dart';
 import 'package:diginotescreen/core/providers/firebase_pairing_provider.dart';
 import 'package:diginotescreen/core/providers/firebase_preview_provider.dart';
-import 'package:diginotescreen/ui/shared/timer_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -80,30 +79,35 @@ class _RemainingTimePanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<TimerProvider>(
-      builder: (context, value, child) {
-        return Text(_scheduleText(context), style: const TextStyle(color: Colors.transparent));
-      },
-    );
+    return Text(_scheduleText(context),
+        style: const TextStyle(color: Colors.transparent));
   }
 
   String _scheduleText(BuildContext context) {
-    Duration difference = message.to.difference(clock.now());
-    // If message is scheduled and to is not in the past, show the remaining time
-    if (message.scheduled && !difference.isNegative) {
-      return _printDuration(difference);
-    } else if (message.scheduled && difference.isNegative) {
-      // schedule but schedule passed
-      String? screenToken =
-          Provider.of<FirebasePairingProvider>(context, listen: false)
-              .getToken();
-      if (screenToken != null) {
-        Provider.of<FirebasePreviewProvider>(context, listen: false)
-            .deleteMessage(screenToken, message.id);
-      }
-      return "";
+    if (!message.scheduled) {
+      return "No Schedule";
     }
-    return "";
+
+    DateTime from = message.from;
+    DateTime to = message.to;
+    // already assuming that from is before now (i.e., it should be displayed)
+    if (from.isAtSameMomentAs(to)) {
+      return "Displaying indefinitely";
+    } else if (from.isBefore(to)) {
+      if (clock.now().isAfter(to)) {
+        // schedule passed so delete it
+        String? screenToken =
+            Provider.of<FirebasePairingProvider>(context, listen: false)
+                .getToken();
+        if (screenToken != null) {
+          Provider.of<FirebasePreviewProvider>(context, listen: false)
+              .deleteMessage(screenToken, message.id);
+        }
+      }
+      Duration difference = message.to.difference(clock.now());
+      return _printDuration(difference);
+    }
+    return "To before From";
   }
 
   // Code taken from here to represent duration as hours:minutes:seconds
