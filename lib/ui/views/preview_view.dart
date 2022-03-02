@@ -1,6 +1,7 @@
 import 'package:clock/clock.dart';
 import 'package:diginotescreen/core/models/messages_model.dart';
 import 'package:diginotescreen/core/providers/firebase_preview_provider.dart';
+import 'package:diginotescreen/ui/shared/timer_provider.dart';
 import 'package:diginotescreen/ui/widgets/preview_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -33,11 +34,13 @@ class _PreviewViewState extends State<PreviewView> {
 
             Iterable<Message>? screens = snapshot.data;
             if (screens != null) {
-              List<Widget> items = <Widget>[];
-              items = _updateScreenItems(context, screens);
-              return Stack(
-                children: items,
-              );
+              return Consumer<TimerProvider>(builder: (context, value, child) {
+                List<Widget> items = <Widget>[];
+                items = _updateScreenItems(context, screens);
+                return Stack(
+                  children: items,
+                );
+              });
             } else {
               return const Text('Error occurred');
             }
@@ -53,7 +56,9 @@ class _PreviewViewState extends State<PreviewView> {
 
     if (messages != null) {
       for (Message message in messages) {
-        if (message.from.isBefore(clock.now()) || message.from.isAtSameMomentAs(clock.now())) {
+        if (message.from.isBefore(clock.now()) ||
+            message.from.isAtSameMomentAs(clock.now()) ||
+            message.from.isAfter(message.to)) {
           messageItems.add(PreviewItem(message: message));
         }
       }
