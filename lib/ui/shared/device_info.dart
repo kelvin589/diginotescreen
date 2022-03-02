@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 
 class DeviceInfo {
-  DeviceInfo({required this.context});
+  DeviceInfo({required BuildContext context})
+      : width = MediaQuery.of(context).size.width,
+        height = MediaQuery.of(context).size.height,
+        viewPadding = MediaQuery.of(context).viewPadding;
 
-  final BuildContext context;
+  DeviceInfo.withValues(
+      {required this.width, required this.height, required this.viewPadding});
 
-  double get width => MediaQuery.of(context).size.width;
-  double get height => MediaQuery.of(context).size.height;
-  EdgeInsets get viewPadding => MediaQuery.of(context).viewPadding;
+  final double width;
+  final double height;
+  final EdgeInsets viewPadding;
+
   double get safeHeight => height - viewPadding.top - viewPadding.bottom;
 }

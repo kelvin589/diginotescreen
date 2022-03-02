@@ -1,11 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diginotescreen/core/models/screen_pairing_model.dart';
 import 'package:diginotescreen/core/repositories/firebase_pairing_repository.dart';
 import 'package:diginotescreen/ui/shared/device_info.dart';
 import 'package:flutter/material.dart';
 
 class FirebasePairingProvider extends ChangeNotifier {
-  final FirebasePairingRepository _pairingRepository =
-      FirebasePairingRepository();
+  FirebasePairingProvider(
+      {required FirebaseFirestore firestoreInstance, String? token})
+      : _pairingRepository = FirebasePairingRepository(
+            firestoreInstance: firestoreInstance, token: token);
+
+  final FirebasePairingRepository _pairingRepository;
 
   Future<String?> init() async {
     await _pairingRepository.init();

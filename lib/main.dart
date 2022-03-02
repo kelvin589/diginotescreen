@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diginotescreen/core/providers/firebase_pairing_provider.dart';
 import 'package:diginotescreen/core/providers/firebase_preview_provider.dart';
 import 'package:diginotescreen/firebase_options.dart';
@@ -11,8 +12,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  final FirebasePairingProvider pairingProvider = FirebasePairingProvider();
-  final FirebasePreviewProvider previewProvider = FirebasePreviewProvider();
+  FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
+
+  final FirebasePairingProvider pairingProvider = FirebasePairingProvider(firestoreInstance: firestoreInstance);
+  final FirebasePreviewProvider previewProvider = FirebasePreviewProvider(firestoreInstance: firestoreInstance);
 
   await pairingProvider.init();
 
