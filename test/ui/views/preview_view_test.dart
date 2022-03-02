@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:diginotescreen/core/models/messages_model.dart';
 import 'package:diginotescreen/core/models/screen_pairing_model.dart';
 import 'package:diginotescreen/core/providers/firebase_pairing_provider.dart';
@@ -132,5 +133,187 @@ void main() async {
     });
   });
 
-  group('Message Scheduling', () {});
+  group('Message Scheduling', () {
+    Message scheduledMessage(
+        {required String message,
+        required DateTime from,
+        required DateTime to}) {
+      return Message(
+        header: 'Header',
+        message: message,
+        x: 0,
+        y: 0,
+        id: 'messageID',
+        from: from,
+        to: to,
+        scheduled: true,
+      );
+    }
+
+    testWidgets('Display a message now, indefinitely',
+        (WidgetTester tester) async {
+      await loadPairedApp(tester);
+      await addMessage(
+        scheduledMessage(
+          message: 'now, indefinite',
+          from: clock.now(),
+          to: clock.now(),
+        ),
+      );
+
+      await tester.idle();
+      await tester.pump(Duration.zero);
+      await tester.pump(Duration.zero);
+
+      expect(find.text('now, indefinite'), findsOneWidget);
+
+      withClock(
+        Clock.fixed(DateTime.now().add(const Duration(days: 100))),
+        () async {
+          await tester.idle();
+          await tester.pump(Duration.zero);
+          await tester.pump(Duration.zero);
+          expect(find.text('now, indefinite'), findsOneWidget);
+        },
+      );
+    });
+
+    testWidgets('Display a message now, for a set period',
+        (WidgetTester tester) async {
+      await loadPairedApp(tester);
+      await addMessage(
+        scheduledMessage(
+          message: 'now, set period',
+          from: clock.now(),
+          to: clock.now().add(const Duration(minutes: 5)),
+        ),
+      );
+
+      await tester.idle();
+      await tester.pump(Duration.zero);
+      await tester.pump(Duration.zero);
+
+      expect(find.text('now, set period'), findsOneWidget);
+
+      withClock(
+        Clock.fixed(DateTime.now().add(const Duration(minutes: 5))),
+        () async {
+          await tester.idle();
+          await tester.pump(const Duration(minutes: 5));
+          await tester.pump(Duration.zero);
+          expect(find.text('now, set period'), findsNothing);
+        },
+      );
+    });
+
+    testWidgets('Display a message in the future, indefinite',
+        (WidgetTester tester) async {
+      await loadPairedApp(tester);
+      await addMessage(
+        scheduledMessage(
+          message: 'future, indefinite',
+          from: clock.now().add(const Duration(minutes: 5)),
+          to: clock.now().add(const Duration(minutes: 5)),
+        ),
+      );
+
+      await tester.idle();
+      await tester.pump(Duration.zero);
+      await tester.pump(Duration.zero);
+
+      expect(find.text('future, indefinite'), findsNothing);
+
+      // Displayed after 5 minutes
+      await withClock(
+        Clock.fixed(clock.now().add(const Duration(minutes: 5))),
+        () async {
+          await tester.idle();
+          await tester.pumpAndSettle();
+          await tester.pump(const Duration(minutes: 5));
+          await tester.pump(Duration.zero);
+          expect(find.text('future, indefinite'), findsOneWidget);
+        },
+      );
+
+      // Displayed for 'indefinite'
+      await withClock(
+        Clock.fixed(clock.now().add(const Duration(days: 100))),
+        () async {
+          await tester.idle();
+          await tester.pump(Duration.zero);
+          await tester.pump(Duration.zero);
+          expect(find.text('future, indefinite'), findsOneWidget);
+        },
+      );
+    });
+
+    testWidgets('Display a message in the future, for a set period',
+        (WidgetTester tester) async {
+      await loadPairedApp(tester);
+      await addMessage(
+        scheduledMessage(
+          message: 'future, set period',
+          from: clock.now().add(const Duration(minutes: 5)),
+          to: clock.now().add(const Duration(minutes: 10)),
+        ),
+      );
+
+      await tester.idle();
+      await tester.pump(Duration.zero);
+      await tester.pump(Duration.zero);
+
+      expect(find.text('future, set period'), findsNothing);
+
+      await withClock(
+        Clock.fixed(clock.now().add(const Duration(minutes: 5))),
+        () async {
+          await tester.idle();
+          await tester.pump(const Duration(minutes: 5));
+          await tester.pump(Duration.zero);
+          expect(find.text('future, set period'), findsOneWidget);
+
+          // Nested clock uses the adjusted clock.now()
+          await withClock(
+            Clock.fixed(
+                clock.now().add(const Duration(minutes: 5, seconds: 1))),
+            () async {
+              await tester.idle();
+              await tester.pump(const Duration(minutes: 5, seconds: 1));
+              await tester.pump(Duration.zero);
+              expect(find.text('future, set period'), findsNothing);
+            },
+          );
+        },
+      );
+    });
+
+    testWidgets(
+        'Incorrect scheduling (from > to) displays the message now indefinitely',
+        (WidgetTester tester) async {
+      await loadPairedApp(tester);
+      await addMessage(
+        scheduledMessage(
+          message: 'now, indefinite',
+          from: clock.now().add(const Duration(minutes: 10)),
+          to: clock.now().add(const Duration(minutes: 5)),
+        ),
+      );
+
+      await tester.idle();
+      await tester.pump(Duration.zero);
+      await tester.pump(Duration.zero);
+
+      expect(find.text('now, indefinite'), findsOneWidget);
+
+      withClock(
+        Clock.fixed(DateTime.now().add(const Duration(days: 100))),
+        () async {
+          await tester.idle();
+          await tester.pump(Duration.zero);
+          await tester.pump(Duration.zero);
+          expect(find.text('now, indefinite'), findsOneWidget);
+        },
+      );
+    });
+  });
 }
