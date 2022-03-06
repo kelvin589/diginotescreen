@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:diginotescreen/core/models/screen_pairing_model.dart';
+import 'package:diginotescreen/core/models/screen_model.dart';
 import 'package:diginotescreen/core/repositories/firebase_pairing_repository.dart';
 import 'package:diginotescreen/ui/shared/device_info.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ class FirebasePairingProvider extends ChangeNotifier {
     await _pairingRepository.addPairingCode(pairingCode, deviceInfo);
   }
 
-  Stream<ScreenPairing?> getStream() {
+  Stream<Screen?> getStream() {
     return _pairingRepository.getStream();
   }
 

@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ScreenPairing {
-  ScreenPairing({required this.pairingCode, required this.paired, required this.name, required this.userID, required this.lastUpdated, required this.screenToken, required this.width, required this.height});
+class Screen {
+  Screen({required this.pairingCode, required this.paired, required this.name, required this.userID, required this.lastUpdated, required this.screenToken, required this.width, required this.height});
 
-  ScreenPairing.fromJson(Map<String, Object?> json)
+  Screen.fromJson(Map<String, Object?> json)
       : this(
           pairingCode: json['pairingCode']! as String,
           paired: json['paired']! as bool,

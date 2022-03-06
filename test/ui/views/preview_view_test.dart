@@ -1,6 +1,6 @@
 import 'package:clock/clock.dart';
 import 'package:diginotescreen/core/models/messages_model.dart';
-import 'package:diginotescreen/core/models/screen_pairing_model.dart';
+import 'package:diginotescreen/core/models/screen_model.dart';
 import 'package:diginotescreen/core/providers/firebase_pairing_provider.dart';
 import 'package:diginotescreen/core/providers/firebase_preview_provider.dart';
 import 'package:diginotescreen/main.dart';
@@ -47,15 +47,15 @@ void main() async {
 
     // Pair screen
     await firestoreInstance
-        .collection('pairingCodes')
-        .withConverter<ScreenPairing>(
+        .collection('screens')
+        .withConverter<Screen>(
           fromFirestore: (snapshot, _) =>
-              ScreenPairing.fromJson(snapshot.data()!),
-          toFirestore: (screenPairing, _) => screenPairing.toJson(),
+              Screen.fromJson(snapshot.data()!),
+          toFirestore: (screen, _) => screen.toJson(),
         )
         .doc(token)
         .set(
-          ScreenPairing(
+          Screen(
             pairingCode: '',
             paired: true,
             lastUpdated: DateTime.now(),

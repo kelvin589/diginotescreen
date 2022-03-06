@@ -1,17 +1,13 @@
-import 'dart:math';
-
-import 'package:diginotescreen/core/models/screen_pairing_model.dart';
+import 'package:diginotescreen/core/models/screen_model.dart';
 import 'package:diginotescreen/core/repositories/firebase_pairing_repository.dart';
-import 'package:diginotescreen/firebase_options.dart';
 import 'package:diginotescreen/ui/shared/device_info.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../document_snapshot_matcher.dart';
 import '../../query_snapshot_matcher.dart';
-import '../../screen_pairing_matcher.dart';
+import '../../screen_matcher.dart';
 
 void main() async {
   const String token = "token";
@@ -34,7 +30,7 @@ void main() async {
     pairingRepository.addPairingCode(pairingCode, deviceInfo);
 
     final snapshot =
-        await firestoreInstance.collection("pairingCodes").doc(token).get();
+        await firestoreInstance.collection("screens").doc(token).get();
     expect(snapshot.exists, true);
 
     final pairingInfo = snapshot.data();
@@ -46,7 +42,7 @@ void main() async {
   });
 
   test('Screen pairing info is received', () async {
-    final ScreenPairing screenPairing = ScreenPairing(
+    final Screen screen = Screen(
         pairingCode: "ABC123",
         paired: false,
         name: "name",
@@ -60,19 +56,19 @@ void main() async {
       pairingRepository.getStream(),
       emitsInOrder([
         null,
-        ScreenPairingMatcher(screenPairing.toJson()),
+        ScreenMatcher(screen.toJson()),
       ]),
     );
 
     await Future.delayed(Duration.zero);
     await firestoreInstance
-        .collection('pairingCodes')
+        .collection('screens')
         .doc(token)
-        .withConverter<ScreenPairing>(
+        .withConverter<Screen>(
           fromFirestore: (snapshot, _) =>
-              ScreenPairing.fromJson(snapshot.data()!),
-          toFirestore: (screenPairing, _) => screenPairing.toJson(),
+              Screen.fromJson(snapshot.data()!),
+          toFirestore: (screen, _) => screen.toJson(),
         )
-        .set(screenPairing);
+        .set(screen);
   });
 }

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:diginotescreen/core/models/screen_pairing_model.dart';
+import 'package:diginotescreen/core/models/screen_model.dart';
 import 'package:diginotescreen/ui/shared/device_info.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -23,15 +23,15 @@ class FirebasePairingRepository {
 
   Future<void> addPairingCode(String pairingCode, DeviceInfo deviceInfo) async {
     return firestoreInstance
-        .collection('pairingCodes')
-        .withConverter<ScreenPairing>(
+        .collection('screens')
+        .withConverter<Screen>(
           fromFirestore: (snapshot, _) =>
-              ScreenPairing.fromJson(snapshot.data()!),
-          toFirestore: (screenPairing, _) => screenPairing.toJson(),
+              Screen.fromJson(snapshot.data()!),
+          toFirestore: (screen, _) => screen.toJson(),
         )
         .doc(token)
         .set(
-            ScreenPairing(
+            Screen(
               pairingCode: pairingCode,
               paired: false,
               lastUpdated: DateTime.now(),
@@ -46,14 +46,14 @@ class FirebasePairingRepository {
         .catchError((error) => print("Failed to add pairing code: $error"));
   }
 
-  Stream<ScreenPairing?> getStream() {
+  Stream<Screen?> getStream() {
     return firestoreInstance
-        .collection('pairingCodes')
+        .collection('screens')
         .doc(token)
-        .withConverter<ScreenPairing>(
+        .withConverter<Screen>(
           fromFirestore: (snapshot, _) =>
-              ScreenPairing.fromJson(snapshot.data()!),
-          toFirestore: (screenPairing, _) => screenPairing.toJson(),
+              Screen.fromJson(snapshot.data()!),
+          toFirestore: (screen, _) => screen.toJson(),
         )
         .snapshots()
         .map((snapshot) => snapshot.data());

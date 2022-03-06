@@ -1,4 +1,4 @@
-import 'package:diginotescreen/core/models/screen_pairing_model.dart';
+import 'package:diginotescreen/core/models/screen_model.dart';
 import 'package:diginotescreen/core/providers/firebase_pairing_provider.dart';
 import 'package:diginotescreen/ui/shared/device_info.dart';
 import 'package:diginotescreen/ui/shared/timer_provider.dart';
@@ -16,7 +16,7 @@ class StarterView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<ScreenPairing?>(
+    return StreamBuilder<Screen?>(
       stream: Provider.of<FirebasePairingProvider>(context, listen: false)
           .getStream(),
       builder: (BuildContext context, snapshot) {
@@ -28,13 +28,13 @@ class StarterView extends StatelessWidget {
           return const Text('Waiting');
         }
 
-        ScreenPairing? screenPairing = snapshot.data;
-        if (screenPairing != null && screenPairing.paired) {
+        Screen? screen = snapshot.data;
+        if (screen != null && screen.paired) {
           return ChangeNotifierProvider(
             create: (context) =>
                 TimerProvider(duration: const Duration(seconds: 1)),
             child: PreviewView(
-              screenToken: screenPairing.screenToken,
+              screenToken: screen.screenToken,
             ),
           );
         } else {

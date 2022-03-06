@@ -41,7 +41,7 @@ void main() async {
       String? codeBefore = (tester.firstWidget(pairingCodeFinder) as Text).data;
 
       final snapshotBefore =
-          await firestoreInstance.collection("pairingCodes").doc(token).get();
+          await firestoreInstance.collection("screens").doc(token).get();
       expect(snapshotBefore.get("pairingCode"), codeBefore);
 
       // ----Test the pairing code after 10 minutes---- //
@@ -51,7 +51,7 @@ void main() async {
       String? codeAfter = (tester.firstWidget(pairingCodeFinder) as Text).data;
 
       final snapshotAfter =
-          await firestoreInstance.collection("pairingCodes").doc(token).get();
+          await firestoreInstance.collection("screens").doc(token).get();
       expect(snapshotAfter.get("pairingCode"), codeAfter);
       expect(snapshotAfter.get("pairingCode") != codeBefore, true);
     });
