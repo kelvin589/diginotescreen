@@ -24,8 +24,8 @@ class MessageItem extends StatelessWidget {
         maxHeight: height,
         maxWidth: width,
       ),
-      decoration: const BoxDecoration(
-        color: Colors.red,
+      decoration: BoxDecoration(
+        color: Color(message.backgrondColour),
       ),
       padding: const EdgeInsets.all(8.0),
       child: Center(
