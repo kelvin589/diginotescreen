@@ -19,6 +19,12 @@ void main() async {
     from: DateTime.now(),
     to: DateTime.now(),
     scheduled: false,
+    fontFamily: "Roboto",
+    fontSize: 12,
+    backgrondColour: 4294961979,
+    foregroundColour: 4278190080,
+    width: 100,
+    height: 100,
   );
 
   late FakeFirebaseFirestore firestoreInstance;
@@ -49,8 +55,7 @@ void main() async {
     await firestoreInstance
         .collection('screens')
         .withConverter<Screen>(
-          fromFirestore: (snapshot, _) =>
-              Screen.fromJson(snapshot.data()!),
+          fromFirestore: (snapshot, _) => Screen.fromJson(snapshot.data()!),
           toFirestore: (screen, _) => screen.toJson(),
         )
         .doc(token)
@@ -83,14 +88,21 @@ void main() async {
           toFirestore: (message, _) => message.toJson(),
         )
         .set(Message(
-            header: message.header,
-            message: message.message,
-            x: 0,
-            y: 0,
-            id: message.id,
-            from: message.from,
-            to: message.to,
-            scheduled: message.scheduled));
+          header: message.header,
+          message: message.message,
+          x: 0,
+          y: 0,
+          id: message.id,
+          from: message.from,
+          to: message.to,
+          scheduled: message.scheduled,
+          fontFamily: message.fontFamily,
+          fontSize: message.fontSize,
+          backgrondColour: message.backgrondColour,
+          foregroundColour: message.foregroundColour,
+          width: message.width,
+          height: message.height,
+        ));
   }
 
   void deleteMessage(String messageID) {
@@ -147,6 +159,12 @@ void main() async {
         from: from,
         to: to,
         scheduled: true,
+        fontFamily: "Roboto",
+        fontSize: 12,
+        backgrondColour: 4294961979,
+        foregroundColour: 4278190080,
+        width: 100,
+        height: 100,
       );
     }
 

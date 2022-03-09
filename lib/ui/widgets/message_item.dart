@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:diginotescreen/core/models/messages_model.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MessageItem extends StatelessWidget {
   const MessageItem({
@@ -23,8 +24,8 @@ class MessageItem extends StatelessWidget {
         maxHeight: height,
         maxWidth: width,
       ),
-      decoration: const BoxDecoration(
-        color: Colors.red,
+      decoration: BoxDecoration(
+        color: Color(message.backgrondColour),
       ),
       padding: const EdgeInsets.all(8.0),
       child: Center(
@@ -32,9 +33,11 @@ class MessageItem extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             message.header != ""
-                ? Padding(
-                    child: Text(message.header),
-                    padding: const EdgeInsets.only(bottom: 16.0),
+                ? AutoSizeText(
+                    message.header,
+                    minFontSize: 3,
+                    style: GoogleFonts.getFont(message.fontFamily,
+                        fontSize: message.fontSize, color: Color(message.foregroundColour)),
                   )
                 : Container(),
             Expanded(
@@ -42,6 +45,9 @@ class MessageItem extends StatelessWidget {
                 child: AutoSizeText(
                   message.message,
                   minFontSize: 3,
+                  style: GoogleFonts.getFont(message.fontFamily,
+                      fontSize: message.fontSize,
+                      color: Color(message.foregroundColour)),
                 ),
               ),
             ),
