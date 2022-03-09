@@ -20,6 +20,12 @@ void main() {
     from: DateTime.now(),
     to: DateTime.now(),
     scheduled: false,
+    fontFamily: "Roboto",
+    fontSize: 12,
+    backgrondColour: 4294961979,
+    foregroundColour: 4278190080,
+    width: 100,
+    height: 100,
   );
 
   setUp(() {
