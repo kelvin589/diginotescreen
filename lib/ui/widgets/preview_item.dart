@@ -18,7 +18,7 @@ class PreviewItem extends StatelessWidget {
       top: message.y,
       child: Column(
         children: [
-          MessageItem(message: message, width: 100, height: 100),
+          MessageItem(message: message, width: message.width, height: message.height),
           _RemainingTimePanel(
             message: message,
           ),
