@@ -26,14 +26,19 @@ class MessageItem extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             message.header != ""
-                ? AutoSizeText(
-                    message.header,
-                    minFontSize: 3,
-                    style: GoogleFonts.getFont(message.fontFamily,
-                        fontSize: message.fontSize, color: Color(message.foregroundColour)),
+                ? Expanded(
+                    flex: 1,
+                    child: AutoSizeText(
+                      message.header,
+                      minFontSize: 3,
+                      style: GoogleFonts.getFont(message.fontFamily,
+                          fontSize: message.fontSize,
+                          color: Color(message.foregroundColour)),
+                    ),
                   )
                 : Container(),
             Expanded(
+              flex: 2,
               child: Center(
                 child: AutoSizeText(
                   message.message,
@@ -52,7 +57,12 @@ class MessageItem extends StatelessWidget {
 }
 
 class StickyNote extends StatelessWidget {
-  const StickyNote({Key? key, required this.child, required this.color, required this.width, required this.height})
+  const StickyNote(
+      {Key? key,
+      required this.child,
+      required this.color,
+      required this.width,
+      required this.height})
       : super(key: key);
 
   final Widget child;
