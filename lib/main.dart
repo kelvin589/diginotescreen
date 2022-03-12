@@ -37,7 +37,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
-      home: const StarterView(),
+      home: const Scaffold(
+        body: StarterView(),
+      ),
     );
   }
 }
