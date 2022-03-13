@@ -16,6 +16,7 @@ class FirebasePairingRepository {
       firebaseMessaging = FirebaseMessaging.instance;
       String? retrievedToken = await firebaseMessaging.getToken();
       token = retrievedToken;
+      return token;
     }
   }
 

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:diginotescreen/core/providers/battery_reporter_provider.dart';
 import 'package:diginotescreen/core/providers/firebase_pairing_provider.dart';
 import 'package:diginotescreen/core/providers/firebase_preview_provider.dart';
 import 'package:diginotescreen/firebase_options.dart';
@@ -13,15 +14,26 @@ void main() async {
 
   FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
 
-  final FirebasePairingProvider pairingProvider = FirebasePairingProvider(firestoreInstance: firestoreInstance);
-  final FirebasePreviewProvider previewProvider = FirebasePreviewProvider(firestoreInstance: firestoreInstance);
+  final FirebasePairingProvider pairingProvider =
+      FirebasePairingProvider(firestoreInstance: firestoreInstance);
+  final FirebasePreviewProvider previewProvider =
+      FirebasePreviewProvider(firestoreInstance: firestoreInstance);
 
   await pairingProvider.init();
+
+  final BatteryReporterProvider batteryReporterProvider =
+      BatteryReporterProvider(
+    firestoreInstance: firestoreInstance,
+    token: pairingProvider.getToken() ?? "Unknown",
+    duration: const Duration(seconds: 1),
+  );
+  await batteryReporterProvider.startTimer();
 
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => pairingProvider),
       ChangeNotifierProvider(create: (context) => previewProvider),
+      ChangeNotifierProvider(create: (context) => batteryReporterProvider),
     ],
     child: const MyApp(),
   ));
