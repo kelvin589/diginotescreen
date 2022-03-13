@@ -25,7 +25,7 @@ class StarterView extends StatelessWidget {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text('Waiting');
+          return const Center(child: CircularProgressIndicator());
         }
 
         Screen? screen = snapshot.data;

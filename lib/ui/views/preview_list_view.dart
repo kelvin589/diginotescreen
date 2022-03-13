@@ -29,7 +29,7 @@ class _PreviewListViewState extends State<PreviewListView> {
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Text('Waiting');
+            return const CircularProgressIndicator();
           }
 
           Iterable<Message>? screens = snapshot.data;
