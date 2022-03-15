@@ -9,16 +9,9 @@ class FirebaseBatteryRepository {
   final String token;
 
   Future<void> updateBatteryPercentage(int batteryPercentage) async {
-    return firestoreInstance
-        .collection('screenInfo')
-        .doc(token)
-        .withConverter<ScreenInfo>(
-          fromFirestore: (snapshot, _) => ScreenInfo.fromJson(snapshot.data()!),
-          toFirestore: (screenInfo, _) => screenInfo.toJson(),
-        )
-        .set(
-          ScreenInfo(screenToken: token, batteryPercentage: batteryPercentage),
-          SetOptions(merge: true),
-        );
+    return firestoreInstance.collection('screenInfo').doc(token).set(
+      {"batteryPercentage": batteryPercentage},
+      SetOptions(merge: true),
+    );
   }
 }
