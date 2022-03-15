@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
-import 'package:diginotescreen/core/providers/battery_reporter_provider.dart';
+import 'package:diginotescreen/core/providers/firebase_battery_reporter_provider.dart';
 import 'package:diginotescreen/core/providers/firebase_pairing_provider.dart';
 import 'package:diginotescreen/core/providers/firebase_preview_provider.dart';
 import 'package:diginotescreen/firebase_options.dart';
@@ -23,8 +23,8 @@ void main() async {
 
   await pairingProvider.init();
 
-  final BatteryReporterProvider batteryReporterProvider =
-      BatteryReporterProvider(
+  final FirebaseBatteryReporterProvider batteryReporterProvider =
+      FirebaseBatteryReporterProvider(
     firestoreInstance: firestoreInstance,
     functionsInstance: functionsInstance,
     token: pairingProvider.getToken() ?? "Unknown",

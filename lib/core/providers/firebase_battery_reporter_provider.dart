@@ -6,8 +6,8 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:diginotescreen/core/repositories/firebase_battery_repository.dart';
 import 'package:flutter/material.dart';
 
-class BatteryReporterProvider extends ChangeNotifier {
-  BatteryReporterProvider(
+class FirebaseBatteryReporterProvider extends ChangeNotifier {
+  FirebaseBatteryReporterProvider(
       {required this.firestoreInstance,
       required this.functionsInstance,
       required this.token,
