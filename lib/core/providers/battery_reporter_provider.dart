@@ -53,6 +53,8 @@ class BatteryReporterProvider extends ChangeNotifier {
         timer.cancel();
         notificationTimer = null;
       });
+    } else if (newBatteryLevel >= lowBatteryThreshold) {
+      notificationTimer = null;
     }
   }
 
