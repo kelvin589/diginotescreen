@@ -30,7 +30,7 @@ void main() async {
     token: pairingProvider.getToken() ?? "Unknown",
     duration: const Duration(seconds: 1),
   );
-  await batteryReporterProvider.startTimer();
+  await batteryReporterProvider.init();
 
   runApp(MultiProvider(
     providers: [

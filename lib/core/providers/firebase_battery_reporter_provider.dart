@@ -15,19 +15,29 @@ class FirebaseBatteryReporterProvider extends ChangeNotifier {
       : _batteryRepository = FirebaseBatteryRepository(
             firestoreInstance: firestoreInstance, token: token);
 
-  Duration duration;
-  Timer? timer;
-  final Battery battery = Battery();
-  final String token;
   final FirebaseFirestore firestoreInstance;
   final FirebaseFunctions functionsInstance;
   final FirebaseBatteryRepository _batteryRepository;
+  final Battery battery = Battery();
+  final String token;
+
+  Duration duration;
+  Timer? timer;
   int lowBatteryThreshold = 30;
   // Seconds between low battery notifications
   Duration lowBatteryNotificationDelay = const Duration(seconds: 600);
   Timer? notificationTimer;
 
-  Future<void> startTimer() async {
+  Future<void> init() async {
+    final initialScreenInfo = await _batteryRepository.getScreenInfo();
+    if (initialScreenInfo != null) {
+      lowBatteryThreshold = initialScreenInfo.lowBatteryThreshold;
+      lowBatteryNotificationDelay = Duration(seconds: initialScreenInfo.lowBatteryNotificationDelay);
+    }
+    await _startTimer();
+  }
+
+  Future<void> _startTimer() async {
     await _updateBatteryPercentage();
     timer = Timer.periodic(duration, _onTimerCallback);
   }

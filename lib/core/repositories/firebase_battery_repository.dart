@@ -14,4 +14,16 @@ class FirebaseBatteryRepository {
       SetOptions(merge: true),
     );
   }
+
+  Future<ScreenInfo?> getScreenInfo() async {
+    final snapshot = await firestoreInstance
+        .collection('screenInfo')
+        .doc(token)
+        .withConverter<ScreenInfo>(
+          fromFirestore: (snapshot, _) => ScreenInfo.fromJson(snapshot.data()!),
+          toFirestore: (screenInfo, _) => screenInfo.toJson(),
+        )
+        .get();
+    return snapshot.data();
+  }
 }
