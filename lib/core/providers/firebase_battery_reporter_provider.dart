@@ -29,17 +29,22 @@ class FirebaseBatteryReporterProvider extends ChangeNotifier {
   Timer? notificationTimer;
 
   Future<void> init() async {
-    final initialScreenInfo = await _batteryRepository.getScreenInfo();
-    if (initialScreenInfo != null) {
-      lowBatteryThreshold = initialScreenInfo.lowBatteryThreshold;
-      lowBatteryNotificationDelay = Duration(seconds: initialScreenInfo.lowBatteryNotificationDelay);
-    }
+    _listenToStream();
     await _startTimer();
   }
 
   Future<void> _startTimer() async {
     await _updateBatteryPercentage();
     timer = Timer.periodic(duration, _onTimerCallback);
+  }
+
+  void _listenToStream() {
+    _batteryRepository.getStream().listen((screenInfo) {
+      if (screenInfo != null) {
+        lowBatteryThreshold = screenInfo.lowBatteryThreshold;
+        lowBatteryNotificationDelay = Duration(seconds: screenInfo.lowBatteryNotificationDelay);
+      }
+    });
   }
 
   void stopTimer() {

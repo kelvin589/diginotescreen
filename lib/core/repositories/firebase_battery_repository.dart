@@ -15,15 +15,14 @@ class FirebaseBatteryRepository {
     );
   }
 
-  Future<ScreenInfo?> getScreenInfo() async {
-    final snapshot = await firestoreInstance
+  Stream<ScreenInfo?> getStream() {
+    return firestoreInstance
         .collection('screenInfo')
         .doc(token)
         .withConverter<ScreenInfo>(
           fromFirestore: (snapshot, _) => ScreenInfo.fromJson(snapshot.data()!),
           toFirestore: (screenInfo, _) => screenInfo.toJson(),
         )
-        .get();
-    return snapshot.data();
+        .snapshots().map((event) => event.data());
   }
 }
