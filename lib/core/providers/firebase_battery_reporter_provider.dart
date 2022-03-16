@@ -48,6 +48,10 @@ class FirebaseBatteryReporterProvider extends ChangeNotifier {
            _lowBatteryNotificationDelay = screenInfo.lowBatteryNotificationDelay;
            _resetTimers();
         }
+        if (_batteryReportingDelay != screenInfo.batteryReportingDelay) {
+           _batteryReportingDelay = screenInfo.batteryReportingDelay;
+           _resetTimers();
+        }
       },
     );
   }
