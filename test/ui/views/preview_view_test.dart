@@ -5,6 +5,7 @@ import 'package:diginotescreen/core/providers/firebase_pairing_provider.dart';
 import 'package:diginotescreen/core/providers/firebase_preview_provider.dart';
 import 'package:diginotescreen/main.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
@@ -25,6 +26,7 @@ void main() async {
     foregroundColour: 4278190080,
     width: 100,
     height: 100,
+    textAlignment: TextAlign.start.name,
   );
 
   late FakeFirebaseFirestore firestoreInstance;
@@ -102,6 +104,7 @@ void main() async {
           foregroundColour: message.foregroundColour,
           width: message.width,
           height: message.height,
+          textAlignment: TextAlign.start.name,
         ));
   }
 
@@ -165,6 +168,7 @@ void main() async {
         foregroundColour: 4278190080,
         width: 100,
         height: 100,
+        textAlignment: TextAlign.start.name,
       );
     }
 

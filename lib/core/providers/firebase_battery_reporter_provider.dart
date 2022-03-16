@@ -20,8 +20,7 @@ class FirebaseBatteryReporterProvider extends ChangeNotifier {
   final Battery battery = Battery();
   final String token;
 
-  // TODO: Add configurable update period
-  int _batteryReportingDelay = 1;
+  int _batteryReportingDelay = 60;
   int _lowBatteryNotificationDelay = 600;
   int _lowBatteryThreshold = 30;
 
