@@ -10,8 +10,7 @@ class FirebaseBatteryReporterProvider extends ChangeNotifier {
   FirebaseBatteryReporterProvider(
       {required this.firestoreInstance,
       required this.functionsInstance,
-      required this.token,
-      required this.duration})
+      required this.token})
       : _batteryRepository = FirebaseBatteryRepository(
             firestoreInstance: firestoreInstance, token: token);
 
@@ -21,34 +20,54 @@ class FirebaseBatteryReporterProvider extends ChangeNotifier {
   final Battery battery = Battery();
   final String token;
 
-  Duration duration;
-  Timer? timer;
-  int lowBatteryThreshold = 30;
+  // TODO: Add configurable update period
+  int _updateBatteryDuration = 1;
+  int _lowBatteryNotificationDelay = 600;
+  int _lowBatteryThreshold = 30;
+
+  Timer? _updateBatteryTimer;
   // Seconds between low battery notifications
-  Duration lowBatteryNotificationDelay = const Duration(seconds: 600);
-  Timer? notificationTimer;
+  Timer? _notificationTimer;
 
   Future<void> init() async {
     _listenToStream();
-    await _startTimer();
-  }
-
-  Future<void> _startTimer() async {
-    await _updateBatteryPercentage();
-    timer = Timer.periodic(duration, _onTimerCallback);
+    await _startUpdateBatteryTimer();
   }
 
   void _listenToStream() {
-    _batteryRepository.getStream().listen((screenInfo) {
-      if (screenInfo != null) {
-        lowBatteryThreshold = screenInfo.lowBatteryThreshold;
-        lowBatteryNotificationDelay = Duration(seconds: screenInfo.lowBatteryNotificationDelay);
-      }
-    });
+    _batteryRepository.getStream().listen(
+      (screenInfo) {
+        if (screenInfo == null) {
+          return;
+        }
+        if (_lowBatteryThreshold != screenInfo.lowBatteryThreshold) {
+          _lowBatteryThreshold = screenInfo.lowBatteryThreshold;
+          _resetTimers();
+        }
+        if (_lowBatteryNotificationDelay != screenInfo.lowBatteryNotificationDelay) {
+           _lowBatteryNotificationDelay = screenInfo.lowBatteryNotificationDelay;
+           _resetTimers();
+        }
+      },
+    );
   }
 
-  void stopTimer() {
-    timer?.cancel();
+  void _resetTimers() {
+    _stopUpdateBatteryTimer();
+    _stopNotificationTimer();
+    _startUpdateBatteryTimer();
+  }
+
+  Future<void> _startUpdateBatteryTimer() async {
+    await _updateBatteryPercentage();
+    _updateBatteryTimer =
+        Timer.periodic(Duration(seconds: _updateBatteryDuration), _onTimerCallback);
+  }
+
+  void _stopUpdateBatteryTimer() {
+    print("Cancel update timer");
+    _updateBatteryTimer?.cancel();
+    _updateBatteryTimer = null;
   }
 
   Future<void> _onTimerCallback(Timer timer) async {
@@ -60,17 +79,25 @@ class FirebaseBatteryReporterProvider extends ChangeNotifier {
   Future<void> _updateBatteryPercentage() async {
     int newBatteryLevel = await battery.batteryLevel;
     await _batteryRepository.updateBatteryPercentage(newBatteryLevel);
-    if (newBatteryLevel <= lowBatteryThreshold && notificationTimer == null) {
-      await _notifyDevicesToLowBattery(newBatteryLevel);
+    if (newBatteryLevel <= _lowBatteryThreshold && _notificationTimer == null) {
       print("Notify to low battery");
-      notificationTimer = Timer.periodic(lowBatteryNotificationDelay, (timer) {
-        print("Cancel timer");
-        timer.cancel();
-        notificationTimer = null;
-      });
-    } else if (newBatteryLevel >= lowBatteryThreshold) {
-      notificationTimer = null;
+      await _notifyDevicesToLowBattery(newBatteryLevel);
+      _startNotificationTimer();
+    } else if (newBatteryLevel >= _lowBatteryThreshold) {
+      _notificationTimer = null;
     }
+  }
+
+  void _startNotificationTimer() {
+    _notificationTimer = Timer.periodic(Duration(seconds: _lowBatteryNotificationDelay), (timer) {
+      _stopNotificationTimer();
+    });
+  }
+
+  void _stopNotificationTimer() {
+    print("Cancel notification timer");
+    _notificationTimer?.cancel();
+    _notificationTimer = null;
   }
 
   Future<void> _notifyDevicesToLowBattery(int batteryLevel) async {

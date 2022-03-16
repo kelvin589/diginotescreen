@@ -28,7 +28,6 @@ void main() async {
     firestoreInstance: firestoreInstance,
     functionsInstance: functionsInstance,
     token: pairingProvider.getToken() ?? "Unknown",
-    duration: const Duration(seconds: 1),
   );
   await batteryReporterProvider.init();
 
