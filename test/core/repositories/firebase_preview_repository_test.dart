@@ -1,6 +1,7 @@
 import 'package:diginotescreen/core/models/messages_model.dart';
 import 'package:diginotescreen/core/repositories/firebase_preview_repository.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../document_snapshot_matcher.dart';
@@ -26,6 +27,7 @@ void main() {
     foregroundColour: 4278190080,
     width: 100,
     height: 100,
+    textAlignment: TextAlign.start.name,
   );
 
   setUp(() {
