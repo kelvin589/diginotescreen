@@ -21,7 +21,7 @@ class FirebaseBatteryReporterProvider extends ChangeNotifier {
   final String token;
 
   // TODO: Add configurable update period
-  int _batteryUpdateDelay = 1;
+  int _batteryReportingDelay = 1;
   int _lowBatteryNotificationDelay = 600;
   int _lowBatteryThreshold = 30;
 
@@ -61,7 +61,7 @@ class FirebaseBatteryReporterProvider extends ChangeNotifier {
   Future<void> _startUpdateBatteryTimer() async {
     await _updateBatteryPercentage();
     _updateBatteryTimer =
-        Timer.periodic(Duration(seconds: _batteryUpdateDelay), _onTimerCallback);
+        Timer.periodic(Duration(seconds: _batteryReportingDelay), _onTimerCallback);
   }
 
   void _stopUpdateBatteryTimer() {
