@@ -12,7 +12,7 @@ class FirebaseBatteryReporterProvider extends ChangeNotifier {
       required this.functionsInstance,
       required this.token})
       : _batteryRepository = FirebaseBatteryRepository(
-            firestoreInstance: firestoreInstance, token: token);
+            firestoreInstance: firestoreInstance,  functionsInstance: functionsInstance, token: token);
 
   final FirebaseFirestore firestoreInstance;
   final FirebaseFunctions functionsInstance;
@@ -84,7 +84,7 @@ class FirebaseBatteryReporterProvider extends ChangeNotifier {
     await _batteryRepository.updateBatteryPercentage(newBatteryLevel);
     if (newBatteryLevel <= _lowBatteryThreshold && _notificationTimer == null) {
       print("Notify to low battery");
-      await _notifyDevicesToLowBattery(newBatteryLevel);
+      await _batteryRepository.notifyDevicesToLowBattery(newBatteryLevel);
       _startNotificationTimer();
     } else if (newBatteryLevel >= _lowBatteryThreshold) {
       _notificationTimer = null;
@@ -101,15 +101,5 @@ class FirebaseBatteryReporterProvider extends ChangeNotifier {
     print("Cancel notification timer");
     _notificationTimer?.cancel();
     _notificationTimer = null;
-  }
-
-  Future<void> _notifyDevicesToLowBattery(int batteryLevel) async {
-    HttpsCallable callable =
-        FirebaseFunctions.instance.httpsCallable('notifyDevicesToLowBattery');
-    final result = await callable.call(<String, dynamic>{
-      'token': token,
-      'batteryLevel': batteryLevel,
-    });
-    print("result: ${result.data}");
   }
 }
