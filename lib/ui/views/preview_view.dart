@@ -3,6 +3,7 @@ import 'package:diginotescreen/core/models/messages_model.dart';
 import 'package:diginotescreen/core/providers/firebase_preview_provider.dart';
 import 'package:diginotescreen/ui/shared/timer_provider.dart';
 import 'package:diginotescreen/ui/widgets/preview_item.dart';
+import 'package:diginotescreen/ui/widgets/qr_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -37,6 +38,7 @@ class _PreviewViewState extends State<PreviewView> {
               return Consumer<TimerProvider>(builder: (context, value, child) {
                 List<Widget> items = <Widget>[];
                 items = _updateScreenItems(context, screens);
+                items.add(const QRForm());
                 return Stack(
                   children: items,
                 );
