@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:diginotescreen/core/models/messages_model.dart';
 
 class FirebasePreviewRepository {
@@ -33,5 +34,25 @@ class FirebasePreviewRepository {
         .then((value) => print("Deleted message"))
         .onError(
             (error, stackTrace) => print("unable to delete message: $error"));
+  }
+
+  Future<String> getUsersEmail(String screenToken) async {
+    final usersSnapshot = await firestoreInstance
+      .collection('screens')
+      .doc(screenToken)
+      .get();
+    final userDoc = usersSnapshot.data();
+    String userID = "";
+    if (userDoc != null) {
+      userID = userDoc["userID"];
+    }
+  
+    HttpsCallable callable =
+        FirebaseFunctions.instance.httpsCallable('getUsersEmail');
+    final result = await callable.call(<String, dynamic>{
+      'userID': userID,
+    });
+    final String? email = result.data;
+    return email ?? "";
   }
 }
