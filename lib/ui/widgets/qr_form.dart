@@ -1,11 +1,29 @@
+import 'package:diginotescreen/core/providers/firebase_preview_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-class QRForm extends StatelessWidget {
-  const QRForm({Key? key}) : super(key: key);
+class QRForm extends StatefulWidget {
+  const QRForm({Key? key, required this.screenToken}) : super(key: key);
 
-  final googleFormLink = "https://docs.google.com/forms/d/e/1FAIpQLSej0ncn2ktr0zzV9z5wwlH8TbdryoyPYsMTw3lVvt11fSz8LQ/viewform?usp=pp_url&entry.1351482419=";
-  final email = "email@domain.com";
+  final String screenToken;
+
+  @override
+  State<QRForm> createState() => _QRFormState();
+}
+
+class _QRFormState extends State<QRForm> {
+  final googleFormLink =
+      "https://docs.google.com/forms/d/e/1FAIpQLSej0ncn2ktr0zzV9z5wwlH8TbdryoyPYsMTw3lVvt11fSz8LQ/viewform?usp=pp_url&entry.1351482419=";
+  String email = "";
+
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<FirebasePreviewProvider>(context, listen: false)
+        .getUsersEmail(widget.screenToken)
+        .then((retrievedEmail) => email = retrievedEmail);
+  }
 
   @override
   Widget build(BuildContext context) {

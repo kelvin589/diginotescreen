@@ -38,7 +38,7 @@ class _PreviewViewState extends State<PreviewView> {
               return Consumer<TimerProvider>(builder: (context, value, child) {
                 List<Widget> items = <Widget>[];
                 items = _updateScreenItems(context, screens);
-                items.add(const QRForm());
+                items.add(QRForm(screenToken: widget.screenToken,));
                 return Stack(
                   children: items,
                 );
