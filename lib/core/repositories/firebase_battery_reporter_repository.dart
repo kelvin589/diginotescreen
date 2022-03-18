@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:diginotescreen/core/models/screen_info_model.dart';
 
-class FirebaseBatteryRepository {
-  FirebaseBatteryRepository(
+class FirebaseBatteryReporterRepository {
+  FirebaseBatteryReporterRepository(
       {required this.firestoreInstance, required this.functionsInstance, required this.token});
 
   final FirebaseFirestore firestoreInstance;
