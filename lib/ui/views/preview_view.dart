@@ -30,6 +30,8 @@ class _PreviewViewState extends State<PreviewView> with WidgetsBindingObserver {
 
     Provider.of<FirebaseBatteryReporterProvider>(context, listen: false).init();
     Provider.of<FirebaseConnectivityProvider>(context, listen: false).init();
+    Provider.of<FirebaseConnectivityProvider>(context, listen: false)
+      .notifyDevicesToOnlineStatus(true, "");
   }
 
   @override
@@ -42,10 +44,13 @@ class _PreviewViewState extends State<PreviewView> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       Provider.of<FirebaseConnectivityProvider>(context, listen: false)
-          .notifyDevicesToOnlineStatus(true, "App in foreground.");
-    } else if (state == AppLifecycleState.paused) {
+          .notifyDevicesToOnlineStatus(true, "Screen in foreground.");
+    } else if (state == AppLifecycleState.detached) {
       Provider.of<FirebaseConnectivityProvider>(context, listen: false)
-          .notifyDevicesToOnlineStatus(false, "App in background.");
+          .notifyDevicesToOnlineStatus(false, "Screen was closed.");
+    }  else if (state == AppLifecycleState.paused) {
+      Provider.of<FirebaseConnectivityProvider>(context, listen: false)
+          .notifyDevicesToOnlineStatus(false, "Screen in background.");
     }
   }
 
