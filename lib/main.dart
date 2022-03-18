@@ -39,6 +39,8 @@ void main() async {
     functionsInstance: functionsInstance,
     token: pairingProvider.getToken() ?? "Unknown",
   );
+  // Init when showing preview
+  // connectivityProvider.init();
 
   runApp(MultiProvider(
     providers: [
