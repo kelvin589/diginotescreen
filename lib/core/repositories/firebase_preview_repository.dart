@@ -42,10 +42,12 @@ class FirebasePreviewRepository {
       .doc(screenToken)
       .get();
     final userDoc = usersSnapshot.data();
+    
     String userID = "";
     if (userDoc != null) {
       userID = userDoc["userID"];
     }
+    if (userID.isEmpty) return "";
   
     HttpsCallable callable =
         FirebaseFunctions.instance.httpsCallable('getUsersEmail');
