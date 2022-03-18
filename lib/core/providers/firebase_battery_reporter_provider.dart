@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:battery_plus/battery_plus.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
-import 'package:diginotescreen/core/repositories/firebase_battery_repository.dart';
+import 'package:diginotescreen/core/repositories/firebase_battery_reporter_repository.dart';
 import 'package:flutter/material.dart';
 
 class FirebaseBatteryReporterProvider extends ChangeNotifier {
@@ -11,12 +11,12 @@ class FirebaseBatteryReporterProvider extends ChangeNotifier {
       {required this.firestoreInstance,
       required this.functionsInstance,
       required this.token})
-      : _batteryRepository = FirebaseBatteryRepository(
+      : _batteryRepository = FirebaseBatteryReporterRepository(
             firestoreInstance: firestoreInstance,  functionsInstance: functionsInstance, token: token);
 
   final FirebaseFirestore firestoreInstance;
   final FirebaseFunctions functionsInstance;
-  final FirebaseBatteryRepository _batteryRepository;
+  final FirebaseBatteryReporterRepository _batteryRepository;
   final Battery battery = Battery();
   final String token;
 
@@ -29,8 +29,8 @@ class FirebaseBatteryReporterProvider extends ChangeNotifier {
   Timer? _notificationTimer;
 
   Future<void> init() async {
-    _listenToStream();
     await _startUpdateBatteryTimer();
+    _listenToStream();
   }
 
   void _listenToStream() {
