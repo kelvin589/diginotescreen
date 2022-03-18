@@ -17,4 +17,8 @@ class FirebasePreviewProvider extends ChangeNotifier {
   void deleteMessage(String screenToken, String messageID) {
     _previewRepository.deleteMessage(screenToken, messageID);
   }
+
+  Future<String> getUsersEmail(String screenToken) async {
+    return await _previewRepository.getUsersEmail(screenToken);
+  }
 }
