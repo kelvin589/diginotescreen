@@ -29,7 +29,8 @@ void main() async {
     functionsInstance: functionsInstance,
     token: pairingProvider.getToken() ?? "Unknown",
   );
-  await batteryReporterProvider.init();
+  // Init when showing preview
+  // await batteryReporterProvider.init();
 
   runApp(MultiProvider(
     providers: [

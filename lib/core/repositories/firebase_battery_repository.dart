@@ -11,7 +11,7 @@ class FirebaseBatteryRepository {
   final String token;
 
   Future<void> updateBatteryPercentage(int batteryPercentage) async {
-    return firestoreInstance.collection('screenInfo').doc(token).set(
+    await firestoreInstance.collection('screenInfo').doc(token).set(
       {"batteryPercentage": batteryPercentage},
       SetOptions(merge: true),
     );

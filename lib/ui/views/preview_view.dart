@@ -1,5 +1,6 @@
 import 'package:clock/clock.dart';
 import 'package:diginotescreen/core/models/messages_model.dart';
+import 'package:diginotescreen/core/providers/firebase_battery_reporter_provider.dart';
 import 'package:diginotescreen/core/providers/firebase_preview_provider.dart';
 import 'package:diginotescreen/ui/shared/timer_provider.dart';
 import 'package:diginotescreen/ui/widgets/preview_item.dart';
@@ -17,6 +18,12 @@ class PreviewView extends StatefulWidget {
 }
 
 class _PreviewViewState extends State<PreviewView> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<FirebaseBatteryReporterProvider>(context, listen: false).init();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

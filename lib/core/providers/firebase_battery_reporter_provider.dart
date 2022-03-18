@@ -29,8 +29,8 @@ class FirebaseBatteryReporterProvider extends ChangeNotifier {
   Timer? _notificationTimer;
 
   Future<void> init() async {
-    _listenToStream();
     await _startUpdateBatteryTimer();
+    _listenToStream();
   }
 
   void _listenToStream() {
