@@ -6,6 +6,11 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:diginotescreen/core/repositories/firebase_connectivity_repository.dart';
 import 'package:flutter/material.dart';
 
+/*
+Online connectivity checking based on network connection, using firebase, would require
+scheduled cloud functions which are billable. 
+*/
+
 class FirebaseConnectivityProvider extends ChangeNotifier {
   FirebaseConnectivityProvider(
       {required this.firestoreInstance,
