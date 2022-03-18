@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:clock/clock.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:diginotescreen/core/models/messages_model.dart';
 import 'package:diginotescreen/core/providers/firebase_battery_reporter_provider.dart';
+import 'package:diginotescreen/core/providers/firebase_connectivity_provider.dart';
 import 'package:diginotescreen/core/providers/firebase_preview_provider.dart';
 import 'package:diginotescreen/ui/shared/timer_provider.dart';
 import 'package:diginotescreen/ui/widgets/preview_item.dart';
@@ -17,11 +21,32 @@ class PreviewView extends StatefulWidget {
   _PreviewViewState createState() => _PreviewViewState();
 }
 
-class _PreviewViewState extends State<PreviewView> {
+class _PreviewViewState extends State<PreviewView> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance?.addObserver(this);
+
     Provider.of<FirebaseBatteryReporterProvider>(context, listen: false).init();
+    Provider.of<FirebaseConnectivityProvider>(context, listen: false).init();
+  }
+
+  @override
+  dispose() {
+    WidgetsBinding.instance?.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      Provider.of<FirebaseConnectivityProvider>(context, listen: false)
+          .notifyDevicesToOnlineStatus(true, "App in foreground.");
+    } else if (state == AppLifecycleState.paused) {
+      Provider.of<FirebaseConnectivityProvider>(context, listen: false)
+          .notifyDevicesToOnlineStatus(false, "App in background.");
+    }
   }
 
   @override
@@ -45,7 +70,9 @@ class _PreviewViewState extends State<PreviewView> {
               return Consumer<TimerProvider>(builder: (context, value, child) {
                 List<Widget> items = <Widget>[];
                 items = _updateScreenItems(context, screens);
-                items.add(QRForm(screenToken: widget.screenToken,));
+                items.add(QRForm(
+                  screenToken: widget.screenToken,
+                ));
                 return Stack(
                   children: items,
                 );
