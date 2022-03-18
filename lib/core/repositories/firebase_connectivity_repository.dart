@@ -11,12 +11,13 @@ class FirebaseConnectivityRepository {
   final FirebaseFunctions functionsInstance;
   final String token;
 
-  Future<void> notifyDevicesToOnlineStatus(bool isOnline) async {
+  Future<void> notifyDevicesToOnlineStatus(bool isOnline, String message) async {
     HttpsCallable callable =
         functionsInstance.httpsCallable('notifyDevicesToOnlineStatus');
     final result = await callable.call(<String, dynamic>{
       'token': token,
       'isOnline': isOnline.toString(),
+      'message': message
     });
     print("result: ${result.data}");
   }
