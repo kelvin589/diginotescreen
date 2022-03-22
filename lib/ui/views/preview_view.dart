@@ -30,7 +30,7 @@ class _PreviewViewState extends State<PreviewView> with WidgetsBindingObserver {
     WidgetsBinding.instance?.addObserver(this);
 
     Provider.of<FirebaseBatteryReporterProvider>(context, listen: false).init();
-    // Provider.of<FirebaseConnectivityProvider>(context, listen: false).init();
+    Provider.of<FirebaseConnectivityProvider>(context, listen: false).init();
     Provider.of<FirebaseConnectivityProvider>(context, listen: false)
       .notifyDevicesToOnlineStatus(true, "");
   }

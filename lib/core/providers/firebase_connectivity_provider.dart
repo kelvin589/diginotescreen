@@ -31,18 +31,7 @@ class FirebaseConnectivityProvider extends ChangeNotifier {
   final String token;
 
   void init() {
-    Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult result) async {
-      try {
-        final lookupResult = await InternetAddress.lookup('example.com');
-        if (lookupResult.isNotEmpty && lookupResult[0].rawAddress.isNotEmpty) {
-          notifyDevicesToOnlineStatus(true, "Connected to ${result.name}.");
-        }
-      } on SocketException catch (_) {
-        notifyDevicesToOnlineStatus(false, "Network connection disconnected.");
-      }
-    });
+    _connectivityRepository.init();
   }
 
   Future<void> notifyDevicesToOnlineStatus(bool isOnline, String message) async {

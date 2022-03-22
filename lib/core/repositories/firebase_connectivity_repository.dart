@@ -14,7 +14,26 @@ class FirebaseConnectivityRepository {
   final FirebaseDatabase realtimeInstance;
   final String token;
 
-  Future<void> notifyDevicesToOnlineStatus(bool isOnline, String message) async {
+  init() {
+    final connectedDatabaseRef = FirebaseDatabase.instance.ref(".info/connected");
+    final screenStatusDatabaseRef = realtimeInstance.ref('/status/' + token);
+
+    connectedDatabaseRef.onValue.listen((event) {
+      final connected = event.snapshot.value as bool? ?? false;
+      if (!connected) return;
+
+      screenStatusDatabaseRef.onDisconnect().set({
+        'isOnline': false,
+      }).then(
+        (value) => screenStatusDatabaseRef.set(
+          {'isOnline': true},
+        ),
+      );
+    });
+  }
+
+  Future<void> notifyDevicesToOnlineStatus(
+      bool isOnline, String message) async {
     HttpsCallable callable =
         functionsInstance.httpsCallable('notifyDevicesToOnlineStatus');
     final result = await callable.call(<String, dynamic>{
