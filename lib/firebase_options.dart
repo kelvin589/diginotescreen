@@ -48,6 +48,7 @@ class DefaultFirebaseOptions {
     authDomain: 'diginote-76a6e.firebaseapp.com',
     storageBucket: 'diginote-76a6e.appspot.com',
     measurementId: 'G-KQLG0JE99C',
+    databaseURL: "https://diginote-76a6e-default-rtdb.europe-west1.firebasedatabase.app",
   );
 
   static const FirebaseOptions android = FirebaseOptions(
@@ -56,5 +57,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1043611456112',
     projectId: 'diginote-76a6e',
     storageBucket: 'diginote-76a6e.appspot.com',
+    databaseURL: "https://diginote-76a6e-default-rtdb.europe-west1.firebasedatabase.app",
   );
 }
