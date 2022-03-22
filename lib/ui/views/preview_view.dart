@@ -11,6 +11,7 @@ import 'package:diginotescreen/ui/widgets/preview_item.dart';
 import 'package:diginotescreen/ui/widgets/qr_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wakelock/wakelock.dart';
 
 class PreviewView extends StatefulWidget {
   const PreviewView({Key? key, required this.screenToken}) : super(key: key);
@@ -56,6 +57,8 @@ class _PreviewViewState extends State<PreviewView> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    Wakelock.enable();
+
     return SafeArea(
       child: Scaffold(
         body: StreamBuilder<Iterable<Message>>(

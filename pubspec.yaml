@@ -47,6 +47,7 @@ dependencies:
   cloud_functions: ^3.2.8
   qr_flutter: ^4.0.0
   connectivity_plus: ^2.2.1
+  wakelock: ^0.6.1+2
 
 dev_dependencies:
   flutter_test:
