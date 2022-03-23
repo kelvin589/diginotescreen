@@ -46,9 +46,6 @@ class _PreviewViewState extends State<PreviewView> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) {
       Provider.of<FirebaseConnectivityProvider>(context, listen: false)
           .notifyDevicesToOnlineStatus(true, "Screen in foreground.");
-    } else if (state == AppLifecycleState.detached) {
-      Provider.of<FirebaseConnectivityProvider>(context, listen: false)
-          .notifyDevicesToOnlineStatus(false, "Screen was closed.");
     }  else if (state == AppLifecycleState.paused) {
       Provider.of<FirebaseConnectivityProvider>(context, listen: false)
           .notifyDevicesToOnlineStatus(false, "Screen in background.");
