@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:diginotescreen/core/models/screen_info_model.dart';
+import 'package:flutter/material.dart';
 
 class FirebaseBatteryReporterRepository {
   FirebaseBatteryReporterRepository(
@@ -35,6 +36,6 @@ class FirebaseBatteryReporterRepository {
       'token': token,
       'batteryLevel': batteryLevel,
     });
-    print("result: ${result.data}");
+    debugPrint("result: ${result.data}");
   }
 }

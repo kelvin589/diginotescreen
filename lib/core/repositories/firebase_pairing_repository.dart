@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diginotescreen/core/models/screen_model.dart';
 import 'package:diginotescreen/ui/shared/device_info.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 
 class FirebasePairingRepository {
   FirebasePairingRepository({required this.firestoreInstance, this.token});
@@ -18,6 +19,7 @@ class FirebasePairingRepository {
       token = retrievedToken;
       return token;
     }
+    return null;
   }
 
   String? getToken() => token;
@@ -43,8 +45,8 @@ class FirebasePairingRepository {
               height: deviceInfo.safeHeight,
             ),
             SetOptions(merge: true))
-        .then((value) => print("Added pairing code"))
-        .catchError((error) => print("Failed to add pairing code: $error"));
+        .then((value) => debugPrint("Added pairing code"))
+        .catchError((error) => debugPrint("Failed to add pairing code: $error"));
   }
 
   Stream<Screen?> getStream() {

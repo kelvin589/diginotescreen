@@ -33,6 +33,6 @@ class FirebaseConnectivityProvider extends ChangeNotifier {
 
   Future<void> notifyDevicesToOnlineStatus(bool isOnline, String message) async {
     await _connectivityRepository.notifyDevicesToOnlineStatus(isOnline, message);
-    print("NOTIFYING DEVICES TO STATUS: $isOnline");
+    debugPrint("NOTIFYING DEVICES TO STATUS: $isOnline");
   }
 }

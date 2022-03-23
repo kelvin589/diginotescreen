@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
 
 class FirebaseConnectivityRepository {
   FirebaseConnectivityRepository(
@@ -41,6 +42,6 @@ class FirebaseConnectivityRepository {
       'isOnline': isOnline.toString(),
       'message': message
     });
-    print("result: ${result.data}");
+    debugPrint("result: ${result.data}");
   }
 }
