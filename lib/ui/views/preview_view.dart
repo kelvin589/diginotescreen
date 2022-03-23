@@ -1,7 +1,4 @@
-import 'dart:async';
-
 import 'package:clock/clock.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:diginotescreen/core/models/messages_model.dart';
 import 'package:diginotescreen/core/providers/firebase_battery_reporter_provider.dart';
 import 'package:diginotescreen/core/providers/firebase_connectivity_provider.dart';

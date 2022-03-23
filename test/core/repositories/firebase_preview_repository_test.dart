@@ -4,9 +4,7 @@ import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../document_snapshot_matcher.dart';
 import '../../message_matcher.dart';
-import '../../query_snapshot_matcher.dart';
 
 void main() {
   late FakeFirebaseFirestore firestoreInstance;
