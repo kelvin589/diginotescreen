@@ -24,10 +24,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -58,5 +55,15 @@ class DefaultFirebaseOptions {
     projectId: 'diginote-76a6e',
     storageBucket: 'diginote-76a6e.appspot.com',
     databaseURL: "https://diginote-76a6e-default-rtdb.europe-west1.firebasedatabase.app",
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyALqcxZ9F-m7-N3-9ajY3Bsuznym9IgwvA',
+    appId: '1:1043611456112:ios:cd24e369c5f0b97d595ab5',
+    messagingSenderId: '1043611456112',
+    projectId: 'diginote-76a6e',
+    storageBucket: 'diginote-76a6e.appspot.com',
+    iosClientId: '1043611456112-bg69cu05ltg93jl7lgasvs7kvqvq9enu.apps.googleusercontent.com',
+    iosBundleId: 'com.example.diginote',
   );
 }
