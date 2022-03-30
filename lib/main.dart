@@ -69,6 +69,7 @@ class MyApp extends StatelessWidget {
       home: const Scaffold(
         body: StarterView(),
       ),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
