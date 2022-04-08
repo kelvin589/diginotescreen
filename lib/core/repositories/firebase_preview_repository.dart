@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:diginotescreen/core/models/messages_model.dart';
+import 'package:flutter/material.dart';
 
 class FirebasePreviewRepository {
   FirebasePreviewRepository({required this.firestoreInstance});
@@ -31,9 +32,9 @@ class FirebasePreviewRepository {
         .collection('message')
         .doc(messageID)
         .delete()
-        .then((value) => print("Deleted message"))
+        .then((value) => debugPrint("Deleted message"))
         .onError(
-            (error, stackTrace) => print("unable to delete message: $error"));
+            (error, stackTrace) => debugPrint("unable to delete message: $error"));
   }
 
   Future<String> getUsersEmail(String screenToken) async {

@@ -1,7 +1,4 @@
-import 'dart:async';
-
 import 'package:clock/clock.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:diginotescreen/core/models/messages_model.dart';
 import 'package:diginotescreen/core/providers/firebase_battery_reporter_provider.dart';
 import 'package:diginotescreen/core/providers/firebase_connectivity_provider.dart';
@@ -11,6 +8,7 @@ import 'package:diginotescreen/ui/widgets/preview_item.dart';
 import 'package:diginotescreen/ui/widgets/qr_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wakelock/wakelock.dart';
 
 class PreviewView extends StatefulWidget {
   const PreviewView({Key? key, required this.screenToken}) : super(key: key);
@@ -29,7 +27,7 @@ class _PreviewViewState extends State<PreviewView> with WidgetsBindingObserver {
     WidgetsBinding.instance?.addObserver(this);
 
     Provider.of<FirebaseBatteryReporterProvider>(context, listen: false).init();
-    // Provider.of<FirebaseConnectivityProvider>(context, listen: false).init();
+    Provider.of<FirebaseConnectivityProvider>(context, listen: false).init();
     Provider.of<FirebaseConnectivityProvider>(context, listen: false)
       .notifyDevicesToOnlineStatus(true, "");
   }
@@ -45,9 +43,6 @@ class _PreviewViewState extends State<PreviewView> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) {
       Provider.of<FirebaseConnectivityProvider>(context, listen: false)
           .notifyDevicesToOnlineStatus(true, "Screen in foreground.");
-    } else if (state == AppLifecycleState.detached) {
-      Provider.of<FirebaseConnectivityProvider>(context, listen: false)
-          .notifyDevicesToOnlineStatus(false, "Screen was closed.");
     }  else if (state == AppLifecycleState.paused) {
       Provider.of<FirebaseConnectivityProvider>(context, listen: false)
           .notifyDevicesToOnlineStatus(false, "Screen in background.");
@@ -56,6 +51,8 @@ class _PreviewViewState extends State<PreviewView> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    Wakelock.enable();
+
     return SafeArea(
       child: Scaffold(
         body: StreamBuilder<Iterable<Message>>(

@@ -30,10 +30,20 @@ class _QRFormState extends State<QRForm> {
     return Positioned(
       left: 0,
       top: 0,
-      child: QrImage(
-        data: googleFormLink + email,
-        version: QrVersions.auto,
-        size: 100.0,
+      child: Container(
+        width: 110,
+        padding: const EdgeInsets.only(left: 4.0),
+        child: Column(
+          children: [
+            QrImage(
+              data: googleFormLink + email,
+              version: QrVersions.auto,
+              size: 100.0,
+            ),
+            const Text(
+                "Scan the QR code to send an email to the staff member."),
+          ],
+        ),
       ),
     );
   }

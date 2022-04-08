@@ -2,7 +2,6 @@ import 'package:diginotescreen/core/models/screen_model.dart';
 import 'package:diginotescreen/core/providers/firebase_pairing_provider.dart';
 import 'package:diginotescreen/ui/shared/device_info.dart';
 import 'package:diginotescreen/ui/shared/timer_provider.dart';
-import 'package:diginotescreen/ui/views/preview_list_view.dart';
 import 'package:diginotescreen/ui/views/preview_view.dart';
 import 'package:diginotescreen/ui/widgets/header.dart';
 import 'package:diginotescreen/ui/widgets/pairing_code_text.dart';

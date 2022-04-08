@@ -27,7 +27,8 @@
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
 
   <title>diginotescreen</title>
   <link rel="manifest" href="manifest.json">
@@ -99,30 +100,6 @@
       // Service workers not supported. Just drop the <script> tag.
       loadMainDartJs();
     }
-  </script>
-  <!-- Firebase initialisation -->
-  <script type="module">
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-analytics.js";
-    // TODO: Add SDKs for Firebase products that you want to use
-    // https://firebase.google.com/docs/web/setup#available-libraries
-  
-    // Your web app's Firebase configuration
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-    const firebaseConfig = {
-      apiKey: "AIzaSyDFFSSQqoEXfF-cupgEkdS7CR7w6Ysg4G8",
-      authDomain: "diginote-76a6e.firebaseapp.com",
-      projectId: "diginote-76a6e",
-      storageBucket: "diginote-76a6e.appspot.com",
-      messagingSenderId: "1043611456112",
-      appId: "1:1043611456112:web:f41ca3da71933c51595ab5",
-      measurementId: "G-9492W044B1"
-    };
-  
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
   </script>
 </body>
 </html>

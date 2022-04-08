@@ -1,17 +1,40 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
 
 class FirebaseConnectivityRepository {
   FirebaseConnectivityRepository(
       {required this.firestoreInstance,
       required this.functionsInstance,
+      required this.realtimeInstance,
       required this.token});
 
   final FirebaseFirestore firestoreInstance;
   final FirebaseFunctions functionsInstance;
+  final FirebaseDatabase realtimeInstance;
   final String token;
 
-  Future<void> notifyDevicesToOnlineStatus(bool isOnline, String message) async {
+  init() {
+    final connectedDatabaseRef = FirebaseDatabase.instance.ref(".info/connected");
+    final screenStatusDatabaseRef = realtimeInstance.ref('/status/' + token);
+
+    connectedDatabaseRef.onValue.listen((event) {
+      final connected = event.snapshot.value as bool? ?? false;
+      if (!connected) return;
+
+      screenStatusDatabaseRef.onDisconnect().set({
+        'isOnline': false,
+      }).then(
+        (value) => screenStatusDatabaseRef.set(
+          {'isOnline': true},
+        ),
+      );
+    });
+  }
+
+  Future<void> notifyDevicesToOnlineStatus(
+      bool isOnline, String message) async {
     HttpsCallable callable =
         functionsInstance.httpsCallable('notifyDevicesToOnlineStatus');
     final result = await callable.call(<String, dynamic>{
@@ -19,6 +42,6 @@ class FirebaseConnectivityRepository {
       'isOnline': isOnline.toString(),
       'message': message
     });
-    print("result: ${result.data}");
+    debugPrint("result: ${result.data}");
   }
 }

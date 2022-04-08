@@ -7,6 +7,7 @@ import 'package:diginotescreen/core/providers/firebase_preview_provider.dart';
 import 'package:diginotescreen/firebase_options.dart';
 import 'package:diginotescreen/ui/views/starter_view.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +17,7 @@ void main() async {
 
   FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
   FirebaseFunctions functionsInstance = FirebaseFunctions.instance;
+  FirebaseDatabase realtimeInstance = FirebaseDatabase.instance;
 
   final FirebasePairingProvider pairingProvider =
       FirebasePairingProvider(firestoreInstance: firestoreInstance);
@@ -37,6 +39,7 @@ void main() async {
       FirebaseConnectivityProvider(
     firestoreInstance: firestoreInstance,
     functionsInstance: functionsInstance,
+    realtimeInstance: realtimeInstance,
     token: pairingProvider.getToken() ?? "Unknown",
   );
   // Init when showing preview
@@ -66,6 +69,7 @@ class MyApp extends StatelessWidget {
       home: const Scaffold(
         body: StarterView(),
       ),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

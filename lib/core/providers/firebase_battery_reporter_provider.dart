@@ -68,7 +68,7 @@ class FirebaseBatteryReporterProvider extends ChangeNotifier {
   }
 
   void _stopUpdateBatteryTimer() {
-    print("Cancel update timer");
+    debugPrint("Cancel update timer");
     _updateBatteryTimer?.cancel();
     _updateBatteryTimer = null;
   }
@@ -83,7 +83,7 @@ class FirebaseBatteryReporterProvider extends ChangeNotifier {
     int newBatteryLevel = await battery.batteryLevel;
     await _batteryRepository.updateBatteryPercentage(newBatteryLevel);
     if (newBatteryLevel <= _lowBatteryThreshold && _notificationTimer == null) {
-      print("Notify to low battery");
+      debugPrint("Notify to low battery");
       await _batteryRepository.notifyDevicesToLowBattery(newBatteryLevel);
       _startNotificationTimer();
     } else if (newBatteryLevel >= _lowBatteryThreshold) {
@@ -98,7 +98,7 @@ class FirebaseBatteryReporterProvider extends ChangeNotifier {
   }
 
   void _stopNotificationTimer() {
-    print("Cancel notification timer");
+    debugPrint("Cancel notification timer");
     _notificationTimer?.cancel();
     _notificationTimer = null;
   }
