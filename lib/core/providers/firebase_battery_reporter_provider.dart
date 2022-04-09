@@ -7,6 +7,10 @@ import 'package:diginotescreen/core/repositories/firebase_battery_reporter_repos
 import 'package:flutter/material.dart';
 
 class FirebaseBatteryReporterProvider extends ChangeNotifier {
+  FirebaseBatteryReporterProvider.dummy() : isDummy = true;
+
+  bool isDummy = false;
+
   FirebaseBatteryReporterProvider(
       {required this.firestoreInstance,
       required this.functionsInstance,
@@ -14,11 +18,11 @@ class FirebaseBatteryReporterProvider extends ChangeNotifier {
       : _batteryRepository = FirebaseBatteryReporterRepository(
             firestoreInstance: firestoreInstance,  functionsInstance: functionsInstance, token: token);
 
-  final FirebaseFirestore firestoreInstance;
-  final FirebaseFunctions functionsInstance;
-  final FirebaseBatteryReporterRepository _batteryRepository;
+  late final FirebaseFirestore firestoreInstance;
+  late final FirebaseFunctions functionsInstance;
+  late final FirebaseBatteryReporterRepository _batteryRepository;
   final Battery battery = Battery();
-  final String token;
+  late final String token;
 
   int _batteryReportingDelay = 60;
   int _lowBatteryNotificationDelay = 600;
@@ -29,11 +33,15 @@ class FirebaseBatteryReporterProvider extends ChangeNotifier {
   Timer? _notificationTimer;
 
   Future<void> init() async {
+    if (isDummy) return;
+
     await _startUpdateBatteryTimer();
     _listenToStream();
   }
 
   void _listenToStream() {
+    if (isDummy) return;
+
     _batteryRepository.getStream().listen(
       (screenInfo) {
         if (screenInfo == null) {
@@ -56,30 +64,40 @@ class FirebaseBatteryReporterProvider extends ChangeNotifier {
   }
 
   void _resetTimers() {
+    if (isDummy) return;
+
     _stopUpdateBatteryTimer();
     _stopNotificationTimer();
     _startUpdateBatteryTimer();
   }
 
   Future<void> _startUpdateBatteryTimer() async {
+    if (isDummy) return;
+
     await _updateBatteryPercentage();
     _updateBatteryTimer =
         Timer.periodic(Duration(seconds: _batteryReportingDelay), _onTimerCallback);
   }
 
   void _stopUpdateBatteryTimer() {
+    if (isDummy) return;
+
     debugPrint("Cancel update timer");
     _updateBatteryTimer?.cancel();
     _updateBatteryTimer = null;
   }
 
   Future<void> _onTimerCallback(Timer timer) async {
+    if (isDummy) return;
+
     if (timer.isActive) {
       await _updateBatteryPercentage();
     }
   }
 
   Future<void> _updateBatteryPercentage() async {
+    if (isDummy) return;
+
     int newBatteryLevel = await battery.batteryLevel;
     await _batteryRepository.updateBatteryPercentage(newBatteryLevel);
     if (newBatteryLevel <= _lowBatteryThreshold && _notificationTimer == null) {
@@ -92,12 +110,16 @@ class FirebaseBatteryReporterProvider extends ChangeNotifier {
   }
 
   void _startNotificationTimer() {
+    if (isDummy) return;
+
     _notificationTimer = Timer.periodic(Duration(seconds: _lowBatteryNotificationDelay), (timer) {
       _stopNotificationTimer();
     });
   }
 
   void _stopNotificationTimer() {
+    if (isDummy) return;
+
     debugPrint("Cancel notification timer");
     _notificationTimer?.cancel();
     _notificationTimer = null;

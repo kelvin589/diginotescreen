@@ -10,6 +10,10 @@ scheduled cloud functions which are billable.
 */
 
 class FirebaseConnectivityProvider extends ChangeNotifier {
+  FirebaseConnectivityProvider.dummy() : isDummy = true;
+
+  bool isDummy = false;
+
   FirebaseConnectivityProvider(
       {required this.firestoreInstance,
       required this.functionsInstance,
@@ -21,18 +25,24 @@ class FirebaseConnectivityProvider extends ChangeNotifier {
             realtimeInstance: realtimeInstance,
             token: token);
 
-  final FirebaseFirestore firestoreInstance;
-  final FirebaseFunctions functionsInstance;
-  final FirebaseDatabase realtimeInstance;
-  final FirebaseConnectivityRepository _connectivityRepository;
-  final String token;
+  late final FirebaseFirestore firestoreInstance;
+  late final FirebaseFunctions functionsInstance;
+  late final FirebaseDatabase realtimeInstance;
+  late final FirebaseConnectivityRepository _connectivityRepository;
+  late final String token;
 
   void init() {
+    if (isDummy) return;
+    
     _connectivityRepository.init();
   }
 
-  Future<void> notifyDevicesToOnlineStatus(bool isOnline, String message) async {
-    await _connectivityRepository.notifyDevicesToOnlineStatus(isOnline, message);
+  Future<void> notifyDevicesToOnlineStatus(
+      bool isOnline, String message) async {
+    if (isDummy) return;
+
+    await _connectivityRepository.notifyDevicesToOnlineStatus(
+        isOnline, message);
     debugPrint("NOTIFYING DEVICES TO STATUS: $isOnline");
   }
 }
