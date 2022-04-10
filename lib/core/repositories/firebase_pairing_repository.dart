@@ -4,15 +4,31 @@ import 'package:diginotescreen/ui/shared/device_info.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
+/// The repository to access functionality related to the pairing of a screen.
+/// 
+/// Add a screen and retrieve [Screen] information.
+/// The [init] method must be called to initialise [FirebasePairingRepository].
 class FirebasePairingRepository {
+  /// Creates a [FirebasePairingRepository] using a [FirebaseFirestore] instance
+  /// for a given screen [token], which is their [FirebaseMessaging] token.
   FirebasePairingRepository({required this.firestoreInstance, this.token});
 
+  /// The [FirebaseFirestore] instance.
   final FirebaseFirestore firestoreInstance;
-  late FirebaseMessaging firebaseMessaging;
 
+  /// The [FirebaseMessaging] instance.
+  late final FirebaseMessaging firebaseMessaging;
+
+  /// The screen token. A [FirebaseMessaging] token.
   String? token;
-  // No mock for FCM. Instead, allow token to be passed in.
+
+  /// Get the screen [token].
+  String? getToken() => token;
+
+  /// Initialises the [FirebasePairingRepository] by 
+  /// retrieving the [token] if it is not set.
   Future<String?> init() async {
+    // No mock for FCM. Instead, allow the token to be passed in.
     if (token == null) {
       firebaseMessaging = FirebaseMessaging.instance;
       String? retrievedToken = await firebaseMessaging.getToken();
@@ -22,8 +38,7 @@ class FirebasePairingRepository {
     return null;
   }
 
-  String? getToken() => token;
-
+  /// Add a screen's [pairingCode] along with its [deviceInfo].
   Future<void> addPairingCode(String pairingCode, DeviceInfo deviceInfo) async {
     return firestoreInstance
         .collection('screens')
@@ -49,6 +64,7 @@ class FirebasePairingRepository {
         .catchError((error) => debugPrint("Failed to add pairing code: $error"));
   }
 
+  /// Retrieve a stream of [Screen] for the given [token].
   Stream<Screen?> getStream() {
     return firestoreInstance
         .collection('screens')
