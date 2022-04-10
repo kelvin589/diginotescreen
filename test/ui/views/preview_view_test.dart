@@ -1,16 +1,12 @@
 import 'package:clock/clock.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:diginotescreen/core/models/messages_model.dart';
 import 'package:diginotescreen/core/models/screen_model.dart';
 import 'package:diginotescreen/core/providers/firebase_battery_reporter_provider.dart';
 import 'package:diginotescreen/core/providers/firebase_connectivity_provider.dart';
 import 'package:diginotescreen/core/providers/firebase_pairing_provider.dart';
 import 'package:diginotescreen/core/providers/firebase_preview_provider.dart';
-import 'package:diginotescreen/firebase_options.dart';
 import 'package:diginotescreen/main.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
