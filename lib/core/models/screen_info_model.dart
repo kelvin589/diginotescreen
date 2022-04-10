@@ -13,9 +13,9 @@ class ScreenInfo {
 
   final String screenToken;
   final int batteryPercentage;
-  int lowBatteryThreshold;
-  int lowBatteryNotificationDelay;
-  int batteryReportingDelay;
+  final int lowBatteryThreshold;
+  final int lowBatteryNotificationDelay;
+  final int batteryReportingDelay;
   final bool isOnline;
 
   Map<String, Object?> toJson() {
