@@ -6,6 +6,8 @@ import 'package:diginotescreen/ui/views/preview_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/// Displays [MainView] if the screen is not paired,
+/// otherwise displays the [PreviewView].
 class StarterView extends StatelessWidget {
   const StarterView({Key? key}) : super(key: key);
 
@@ -27,6 +29,7 @@ class StarterView extends StatelessWidget {
 
         Screen? screen = snapshot.data;
         if (screen != null && screen.paired) {
+          // The screen is paired so start the timer and show the preview view.
           return ChangeNotifierProvider(
             create: (context) =>
                 TimerProvider(duration: const Duration(seconds: 1)),
@@ -35,6 +38,7 @@ class StarterView extends StatelessWidget {
             ),
           );
         } else {
+          // Otherwise show the pairing code view
           return MainView(
             mainContext: context,
           );

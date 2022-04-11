@@ -5,6 +5,9 @@ import 'package:diginotescreen/ui/widgets/pairing_code_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/// Displays the pairing code text for an unpaired screen.
+/// 
+/// Pairing codes are added to Firebase as they are generated.
 class MainView extends StatelessWidget {
   const MainView({Key? key, required this.mainContext}) : super(key: key);
 
