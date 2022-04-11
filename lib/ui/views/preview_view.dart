@@ -4,7 +4,7 @@ import 'package:diginotescreen/core/providers/firebase_battery_reporter_provider
 import 'package:diginotescreen/core/providers/firebase_connectivity_provider.dart';
 import 'package:diginotescreen/core/providers/firebase_preview_provider.dart';
 import 'package:diginotescreen/ui/shared/timer_provider.dart';
-import 'package:diginotescreen/ui/widgets/preview_item.dart';
+import 'package:diginotescreen/ui/widgets/positioned_message_item.dart';
 import 'package:diginotescreen/ui/widgets/qr_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -93,7 +93,7 @@ class _PreviewViewState extends State<PreviewView> with WidgetsBindingObserver {
     );
   }
 
-  /// Generates the [PreviewItem]s to display the messages.
+  /// Generates the [PositionedMessageItem]s to display the messages.
   List<Widget> _updateScreenItems(
       BuildContext context, Iterable<Message>? messages) {
     List<Widget> messageItems = [];
@@ -106,7 +106,7 @@ class _PreviewViewState extends State<PreviewView> with WidgetsBindingObserver {
         if (message.from.isBefore(clock.now()) ||
             message.from.isAtSameMomentAs(clock.now()) ||
             message.from.isAfter(message.to)) {
-          messageItems.add(PreviewItem(message: message));
+          messageItems.add(PositionedMessageItem(message: message));
         }
       }
     }

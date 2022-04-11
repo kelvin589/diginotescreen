@@ -6,8 +6,8 @@ import 'package:diginotescreen/ui/widgets/message_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class PreviewItem extends StatelessWidget {
-  const PreviewItem({Key? key, required this.message}) : super(key: key);
+class PositionedMessageItem extends StatelessWidget {
+  const PositionedMessageItem({Key? key, required this.message}) : super(key: key);
 
   final Message message;
 
