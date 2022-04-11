@@ -3,9 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+/// Displays a QR code which, once scanned, takes viewers to a Google Forms
+/// to submit a message to the owner of this screen.
+///
+/// The form is pre-populated with the owner's email address, if found.
 class QRForm extends StatefulWidget {
+  /// Creates a [QRForm] for the screen with [screenToken].
   const QRForm({Key? key, required this.screenToken}) : super(key: key);
 
+  /// The screen token.
   final String screenToken;
 
   @override
@@ -13,13 +19,17 @@ class QRForm extends StatefulWidget {
 }
 
 class _QRFormState extends State<QRForm> {
+  /// The link to the Google Forms.
   final googleFormLink =
       "https://docs.google.com/forms/d/e/1FAIpQLSej0ncn2ktr0zzV9z5wwlH8TbdryoyPYsMTw3lVvt11fSz8LQ/viewform?usp=pp_url&entry.1351482419=";
+
+  /// The owner's email address.
   String email = "";
 
   @override
   void initState() {
     super.initState();
+    // Retrieve the email address.
     Provider.of<FirebasePreviewProvider>(context, listen: false)
         .getUsersEmail(widget.screenToken)
         .then((retrievedEmail) => email = retrievedEmail);
