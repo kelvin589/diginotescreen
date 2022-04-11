@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 /// A provider using the [FirebasePairingRepository].
 /// 
 /// Updates the pairing code, receives a stream of [Screen], and retrieves the token.
+/// The [init] method must be called to initialise [FirebasePairingProvider].
 class FirebasePairingProvider extends ChangeNotifier {
   /// Creates a [FirebasePairingProvider] using a [FirebaseFirestore],
   /// for a given screen [token].
