@@ -9,7 +9,8 @@ import 'package:provider/provider.dart';
 /// A positioned [MessageItem] which deletes itself if scheduled to do so.
 class PositionedMessageItem extends StatelessWidget {
   /// Creates a [PositionedMessageItem] using the [message].
-  const PositionedMessageItem({Key? key, required this.message}) : super(key: key);
+  const PositionedMessageItem({Key? key, required this.message})
+      : super(key: key);
 
   /// The message to be displayed.
   final Message message;
@@ -21,7 +22,11 @@ class PositionedMessageItem extends StatelessWidget {
       top: message.y,
       child: Column(
         children: [
-          MessageItem(message: message, width: message.width, height: message.height),
+          MessageItem(
+            message: message,
+            width: message.width,
+            height: message.height,
+          ),
           _RemainingTimePanel(
             message: message,
           ),
@@ -32,10 +37,10 @@ class PositionedMessageItem extends StatelessWidget {
 }
 
 /// A panel displaying the remaining time transparently.
-/// 
+///
 /// After remaining time has passed, the [message] will be deleted.
 class _RemainingTimePanel extends StatelessWidget {
-  /// Creates a [_RemainingTimePanel] for the [messsage].
+  /// Creates a [_RemainingTimePanel] for the [message].
   const _RemainingTimePanel({Key? key, required this.message})
       : super(key: key);
 
@@ -50,17 +55,36 @@ class _RemainingTimePanel extends StatelessWidget {
 
   /// Determines whether to display the schedule text and to subsequently
   /// delete the [message].
+  ///
+  /// Scheduling may be in one of five states:
+  ///	  1. From = to <= now: scheduled for now, indefinitely.
+  ///   2. From = to > now: scheduled in the future, indefinitely.
+  ///   3. From > now && to > now: scheduled in the future, for a set period.
+  ///   4. From = now && to > from: scheduled for now, for a set period
+  ///   5. From > To: displays indefinitely (invalid but it shouldn't be possible anyway).
   String _scheduleText(BuildContext context) {
+    DateTime now = clock.now();
+
     if (!message.scheduled) return "No Schedule";
 
-    DateTime from = message.from;
-    DateTime to = message.to;
-    // Already assumed that from is before now (i.e., it should be displayed)
-    if (from.isAtSameMomentAs(to)) {
-      return "Displaying indefinitely";
-    } else if (from.isBefore(to)) {
-      if (clock.now().isAfter(to)) {
-        // Schedule has passed so delete it
+    // from == to: displayed indefinitely.
+    if (message.from.isAtSameMomentAs(message.to)) {
+      // from > now: scheduled for the future.
+      return message.from.isAfter(now) ? "Scheduled" : "Indefinite";
+      // to > from: displayed for a set period.
+    } else if (message.to.isAfter(message.from)) {
+      // Calculate the difference from now until to.
+      Duration difference = message.to.difference(now);
+
+      // from > now: scheduled for the future.
+      if (message.from.isAfter(now)) return "Scheduled";
+
+      // We have not reached to.
+      if (!difference.isNegative) {
+        return _printDuration(difference);
+        // Otherwise, the schedule has passed.
+      } else if (difference.isNegative) {
+        // Remove the message.
         String? screenToken =
             Provider.of<FirebasePairingProvider>(context, listen: false)
                 .getToken();
@@ -69,10 +93,10 @@ class _RemainingTimePanel extends StatelessWidget {
               .deleteMessage(screenToken, message.id);
         }
       }
-      Duration difference = message.to.difference(clock.now());
-      return _printDuration(difference);
     }
-    return "To before From";
+
+    // Some undefined from and to combination.
+    return "Undefined";
   }
 
   // Code taken from here to represent duration as hours:minutes:seconds:
