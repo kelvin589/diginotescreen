@@ -5,7 +5,7 @@ import 'package:diginotescreen/core/providers/firebase_connectivity_provider.dar
 import 'package:diginotescreen/core/providers/firebase_preview_provider.dart';
 import 'package:diginotescreen/ui/shared/timer_provider.dart';
 import 'package:diginotescreen/ui/widgets/positioned_message_item.dart';
-import 'package:diginotescreen/ui/widgets/qr_form.dart';
+import 'package:diginotescreen/ui/widgets/qr_code.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wakelock/wakelock.dart';
@@ -77,7 +77,7 @@ class _PreviewViewState extends State<PreviewView> with WidgetsBindingObserver {
               return Consumer<TimerProvider>(builder: (context, value, child) {
                 List<Widget> items = <Widget>[];
                 items = _updateScreenItems(context, screens);
-                items.add(QRForm(
+                items.add(QRCode(
                   screenToken: widget.screenToken,
                 ));
                 return Stack(

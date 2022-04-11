@@ -7,18 +7,18 @@ import 'package:qr_flutter/qr_flutter.dart';
 /// to submit a message to the owner of this screen.
 ///
 /// The form is pre-populated with the owner's email address, if found.
-class QRForm extends StatefulWidget {
-  /// Creates a [QRForm] for the screen with [screenToken].
-  const QRForm({Key? key, required this.screenToken}) : super(key: key);
+class QRCode extends StatefulWidget {
+  /// Creates a [QRCode] for the screen with [screenToken].
+  const QRCode({Key? key, required this.screenToken}) : super(key: key);
 
   /// The screen token.
   final String screenToken;
 
   @override
-  State<QRForm> createState() => _QRFormState();
+  State<QRCode> createState() => _QRCodeState();
 }
 
-class _QRFormState extends State<QRForm> {
+class _QRCodeState extends State<QRCode> {
   /// The link to the Google Forms.
   final googleFormLink =
       "https://docs.google.com/forms/d/e/1FAIpQLSej0ncn2ktr0zzV9z5wwlH8TbdryoyPYsMTw3lVvt11fSz8LQ/viewform?usp=pp_url&entry.1351482419=";
