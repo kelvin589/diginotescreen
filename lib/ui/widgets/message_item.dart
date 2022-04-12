@@ -3,7 +3,11 @@ import 'package:diginotescreen/core/models/messages_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+/// A [MessageItem] is the widget displaying the [StickyNote] which contains
+/// a [message] within a container of set [width] and [height].
 class MessageItem extends StatelessWidget {
+  /// Creates a [MessageItem] displaying the contents of the [message] within
+  /// a container of set [width] and [height];
   const MessageItem({
     Key? key,
     required this.message,
@@ -11,8 +15,13 @@ class MessageItem extends StatelessWidget {
     required this.height,
   }) : super(key: key);
 
+  /// The [Message] to be displayed.
   final Message message;
+
+  /// The width of the container displaying the [message].
   final double width;
+
+  /// The height of the container displaying the [message].
   final double height;
 
   @override
@@ -58,18 +67,28 @@ class MessageItem extends StatelessWidget {
   }
 }
 
+/// The decoration for a [MessageItem] to make it appear like a post-it note.
 class StickyNote extends StatelessWidget {
-  const StickyNote(
-      {Key? key,
-      required this.child,
-      required this.color,
-      required this.width,
-      required this.height})
-      : super(key: key);
+  /// Creates a [StickyNote] containing the [child] widget with a background [color],
+  /// withing a container of fixed [width] and [height].
+  const StickyNote({
+    Key? key,
+    required this.child,
+    required this.color,
+    required this.width,
+    required this.height,
+  }) : super(key: key);
 
+  /// The [Widget] to be displayed within the [StickyNote].
   final Widget child;
+
+  /// The background [Color] of the [StickyNote].
   final Color color;
+
+  /// The width of the container displaying the [child].
   final double width;
+
+  /// The height of the container displaying the [child].
   final double height;
 
   @override
@@ -81,6 +100,7 @@ class StickyNote extends StatelessWidget {
         painter: _StickyNotePainter(color: color),
         child: Center(
           child: SizedBox(
+            // 75% of the width/height to pad the child.
             width: width * 0.75,
             height: height * 0.75,
             child: child,
@@ -91,8 +111,8 @@ class StickyNote extends StatelessWidget {
   }
 }
 
-// Code for the StickyNotePainter has been taken from this github:
-// https://github.com/flutter-clutter/flutter-sticky-note/blob/master/lib/sticky_note.dart
+/// Code for the StickyNotePainter has been taken from this github:
+/// https://github.com/flutter-clutter/flutter-sticky-note/blob/master/lib/sticky_note.dart
 class _StickyNotePainter extends CustomPainter {
   _StickyNotePainter({required this.color});
 

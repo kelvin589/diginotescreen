@@ -4,12 +4,13 @@ import 'package:diginotescreen/core/providers/firebase_battery_reporter_provider
 import 'package:diginotescreen/core/providers/firebase_connectivity_provider.dart';
 import 'package:diginotescreen/core/providers/firebase_preview_provider.dart';
 import 'package:diginotescreen/ui/shared/timer_provider.dart';
-import 'package:diginotescreen/ui/widgets/preview_item.dart';
-import 'package:diginotescreen/ui/widgets/qr_form.dart';
+import 'package:diginotescreen/ui/widgets/positioned_message_item.dart';
+import 'package:diginotescreen/ui/widgets/qr_code.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wakelock/wakelock.dart';
 
+/// Displays the screen's associated messages.
 class PreviewView extends StatefulWidget {
   const PreviewView({Key? key, required this.screenToken}) : super(key: key);
 
@@ -26,6 +27,7 @@ class _PreviewViewState extends State<PreviewView> with WidgetsBindingObserver {
 
     WidgetsBinding.instance?.addObserver(this);
 
+    // Initialise providers.
     Provider.of<FirebaseBatteryReporterProvider>(context, listen: false).init();
     Provider.of<FirebaseConnectivityProvider>(context, listen: false).init();
     Provider.of<FirebaseConnectivityProvider>(context, listen: false)
@@ -38,6 +40,7 @@ class _PreviewViewState extends State<PreviewView> with WidgetsBindingObserver {
     super.dispose();
   }
 
+  /// Notify devices to online status if the app is put in the foreground or background.
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
@@ -51,6 +54,7 @@ class _PreviewViewState extends State<PreviewView> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    // Ensure the screen does not sleep.
     Wakelock.enable();
 
     return SafeArea(
@@ -69,10 +73,11 @@ class _PreviewViewState extends State<PreviewView> with WidgetsBindingObserver {
 
             Iterable<Message>? screens = snapshot.data;
             if (screens != null) {
+              // Consume the timer to update the UI as messages may be scheduled
               return Consumer<TimerProvider>(builder: (context, value, child) {
                 List<Widget> items = <Widget>[];
                 items = _updateScreenItems(context, screens);
-                items.add(QRForm(
+                items.add(QRCode(
                   screenToken: widget.screenToken,
                 ));
                 return Stack(
@@ -88,16 +93,20 @@ class _PreviewViewState extends State<PreviewView> with WidgetsBindingObserver {
     );
   }
 
+  /// Generates the [PositionedMessageItem]s to display the messages.
   List<Widget> _updateScreenItems(
       BuildContext context, Iterable<Message>? messages) {
     List<Widget> messageItems = [];
 
     if (messages != null) {
       for (Message message in messages) {
+        // Display only messages which should be displayed.
+        // If the schedule is invalid (i.e., from after to),
+        // display the message anyway.
         if (message.from.isBefore(clock.now()) ||
             message.from.isAtSameMomentAs(clock.now()) ||
             message.from.isAfter(message.to)) {
-          messageItems.add(PreviewItem(message: message));
+          messageItems.add(PositionedMessageItem(message: message));
         }
       }
     }

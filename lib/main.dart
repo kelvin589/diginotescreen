@@ -11,6 +11,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/// Initialises providers and passes them to descendants of [MyApp]. 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -32,7 +33,7 @@ void main() async {
     functionsInstance: functionsInstance,
     token: pairingProvider.getToken() ?? "Unknown",
   );
-  // Init when showing preview
+  // batteryReporterProvider is initialised when showing the preview
   // await batteryReporterProvider.init();
 
   final FirebaseConnectivityProvider connectivityProvider =
@@ -42,7 +43,7 @@ void main() async {
     realtimeInstance: realtimeInstance,
     token: pairingProvider.getToken() ?? "Unknown",
   );
-  // Init when showing preview
+  // connectivityProvider is initialised when showing the preview
   // connectivityProvider.init();
 
   runApp(MultiProvider(
@@ -56,13 +57,14 @@ void main() async {
   ));
 }
 
+/// The home of the app opens to the [StarterView].
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Diginote Screen',
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
