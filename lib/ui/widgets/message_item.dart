@@ -3,7 +3,7 @@ import 'package:diginotescreen/core/models/messages_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/// A [MessageItem] is the widget displaying the [StickyNote] which contains 
+/// A [MessageItem] is the widget displaying the [StickyNote] which contains
 /// a [message] within a container of set [width] and [height].
 class MessageItem extends StatelessWidget {
   /// Creates a [MessageItem] displaying the contents of the [message] within
@@ -17,8 +17,10 @@ class MessageItem extends StatelessWidget {
 
   /// The [Message] to be displayed.
   final Message message;
+
   /// The width of the container displaying the [message].
   final double width;
+
   /// The height of the container displaying the [message].
   final double height;
 
@@ -67,15 +69,15 @@ class MessageItem extends StatelessWidget {
 
 /// The decoration for a [MessageItem] to make it appear like a post-it note.
 class StickyNote extends StatelessWidget {
-  /// Creates a [StickyNote] containing the [child] widget with a background [colour],
+  /// Creates a [StickyNote] containing the [child] widget with a background [color],
   /// withing a container of fixed [width] and [height].
-  const StickyNote(
-      {Key? key,
-      required this.child,
-      required this.color,
-      required this.width,
-      required this.height})
-      : super(key: key);
+  const StickyNote({
+    Key? key,
+    required this.child,
+    required this.color,
+    required this.width,
+    required this.height,
+  }) : super(key: key);
 
   /// The [Widget] to be displayed within the [StickyNote].
   final Widget child;
