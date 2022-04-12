@@ -1,6 +1,6 @@
 # diginotescreen
 
-Diginote screen is the companion app to [Diginote](https://github.com/kelvin589/diginote) to display messages.
+Diginote screen is the companion app to [Diginote](https://github.com/kelvin589/diginote) to display messages. A documentation page for the public libraries can be found [here](https://kelvin589.github.io/diginotescreen/).
 
 ## Table of Contents
 * [Overview](#overview)
