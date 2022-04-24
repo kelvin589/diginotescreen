@@ -9,7 +9,8 @@ Diginote screen is the companion app to [Diginote](https://github.com/kelvin589/
 * [Setup](#setup)
 
 ## Overview
-A paired Diginote Screen is used to display messages from [Diginote](https://github.com/kelvin589/diginote).
+A paired Diginote Screen is used to display messages using a [Diginote](https://github.com/kelvin589/diginote) remote.
+
 [![Diginote Demo](https://img.youtube.com/vi/rFyTfdWfLe4/0.jpg)](https://www.youtube.com/watch?v=rFyTfdWfLe4 "Diginote Demo")
 
 ## Features
